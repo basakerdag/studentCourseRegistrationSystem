@@ -1,4 +1,4 @@
-package projectModels;
+package com.uni.registration.projectModels;
 
 public class Instructor{
     private String instructorName;
@@ -31,5 +31,10 @@ public class Instructor{
     public void setInstructorDepartment(String instructorDepartment){
         this.instructorDepartment=instructorDepartment;
     }
+
+    @Override
+    public String toString() {
+    return "Instructor: " + instructorName + " (ID: " + instructorID + ")";
+     }
 
 }

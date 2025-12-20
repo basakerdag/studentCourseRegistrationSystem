@@ -1,9 +1,11 @@
-package projectModels;
+package com.uni.registration.projectModels.Courses;
 
-public class Course{
+import com.uni.registration.projectModels.Instructor;
+
+public abstract class Course{
     private String courseName;
     private String courseCode;
-    private int courseCredit;
+    protected int courseCredit;
     private Instructor instructor;
 
     public Course (String courseName,String courseCode,int courseCredit,Instructor instructor){
@@ -13,12 +15,15 @@ public class Course{
         this.instructor=instructor;
     }
 
+    public abstract String getCourseType();
+
     public String getCourseName(){
         return courseName;
     }
     public void setCourseName(String courseName){
          this.courseName=courseName;
     }
+
 
     public String getCourseCode(){
         return courseCode;
@@ -55,3 +60,4 @@ public class Course{
     }
 
 }
+
