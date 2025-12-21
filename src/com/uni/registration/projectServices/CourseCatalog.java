@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CourseCatalog {
     private List<Course> allCourses;
-    private final String FILE_PATH = "src/data/courses.csv";
+    private final String filePath = "src/data/courses.csv";
 
     public CourseCatalog() {
         this.allCourses = new ArrayList<>();
@@ -19,17 +19,17 @@ public class CourseCatalog {
     }
 
     private void loadCoursesFromCSV() {
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         if (!file.exists()) return;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
 
                 String[] data = line.split(",");
                                 
-                Instructor inst = new Instructor(data[3], data[4], data[5]);
+                Instructor inst = new Instructor(data[3], data[4], data[5],data[6],data[7]);
                 int credit = Integer.parseInt(data[2]);
                 
                 Course course;
@@ -48,7 +48,7 @@ public class CourseCatalog {
     public void addCourse(Course course) {
         allCourses.add(course);
         
-        try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_PATH, true))) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filePath, true))) {
             String csvLine = String.format("%s,%s,%d,%s,%s,%s,%s",
                 course.getCourseCode(),
                 course.getCourseName(),
@@ -63,6 +63,17 @@ public class CourseCatalog {
             System.err.println("Error saving to file: " + e.getMessage());
         }
     }
+
+    public void displayCourses() {
+    if (allCourses.isEmpty()) {
+        System.out.println("No courses available in the catalog.");
+        return;
+    }
+    System.out.println("\n--- Available Courses ---");
+    for (Course c : allCourses) {
+        System.out.println("Code: " + c.getCourseCode() + " | Name: " + c.getCourseName() + " | Credit: " + c.getCourseCredit());
+    }
+}
 
     public List<Course> getAllCourses() {
         return allCourses;
