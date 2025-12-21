@@ -11,15 +11,17 @@ public abstract class Student implements Registrable{
     private String studentID;
     private String department;
     private int year;
+    private String password;
     protected ArrayList<Course> registeredCourse;
 
 
-    public Student(String name,String surname,String studentID,String department,int year){
+    public Student(String name,String surname,String studentID,String department,int year,String password){
         this.name=name;
         this.surname=surname;
         this.studentID=studentID;
         this.department=department;
         this.year=year;
+        this.password=password;
         this.registeredCourse=new ArrayList<>();
     }
 
@@ -79,6 +81,13 @@ public abstract class Student implements Registrable{
     }
     public void setYear(int year){
         this.year=year;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+    public void setPassword(String password){
+        this.password=password;
     }
 
     public ArrayList<Course> getRegisteredCourses(){
