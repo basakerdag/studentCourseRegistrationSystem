@@ -1,4 +1,6 @@
 package com.uni.registration.projectServices;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,15 +11,49 @@ import com.uni.registration.projectModels.Students.*;
 
 public class StudentManager {
     private List<Student> students;
-    private final String filePath = "src/data/students.csv";
+    private final String studentsFile = "src/data/students.csv";
 
     public StudentManager() {
         this.students = new ArrayList<>();
+        loadFromStudentCsv();
     }
+
+    public void loadFromStudentCsv(){
+     try(BufferedReader br=new BufferedReader(new FileReader(studentsFile))){
+        String line;
+        while((line=br.readLine())!=null){
+            String[] data=line.split(",");
+            if(data.length < 7) continue;
+            String studentName=data[0];
+            String studentSurname=data[1];
+            int studentID=Integer.parseInt(data[2]);
+            String studentDepartment=data[3];
+            int studentYear=Integer.parseInt(data[4]);
+            String studentPassword=data[5];
+            String studentType=data[6];
+            
+            Student newStudent=null;
+            if(studentType.equals("Graduate Student")){
+                newStudent=new GraduateStudent(studentName,studentSurname,studentID,studentDepartment,studentYear,studentPassword);
+            }else if(studentType.equals("Undergraduate Student")){
+                newStudent=new UndergraduateStudent(studentName, studentSurname, studentID, studentDepartment, studentYear, studentPassword);
+            }
+            
+            if(newStudent!=null){
+                students.add(newStudent);
+            }
+        }
+    }catch(IOException e) {
+        System.out.println("No existing student data found or file is empty.");
+    }
+   
+} 
+
+
 
     public void addStudent(Student student) {
         students.add(student);
-        try(PrintWriter pw=new PrintWriter(new FileWriter(filePath,true))){
+        try(PrintWriter pw=new PrintWriter(new FileWriter(studentsFile,true))){
             String csvLine=String.format("%s,%s,%d,%s,%d,%s,%s",
                 student.getName(),
                 student.getSurname(),

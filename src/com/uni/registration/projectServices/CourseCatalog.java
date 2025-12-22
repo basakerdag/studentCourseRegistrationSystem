@@ -4,42 +4,49 @@ import com.uni.registration.projectModels.*;
 import com.uni.registration.projectModels.Courses.Course;
 import com.uni.registration.projectModels.Courses.ElectiveCourse;
 import com.uni.registration.projectModels.Courses.MandatoryCourse;
-
+import com.uni.registration.projectServices.InstructorManager;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseCatalog {
     private List<Course> allCourses;
-    private final String filePath = "src/data/courses.csv";
+    private final String coursesPath = "src/data/courses.csv";
+    InstructorManager instructorManager;
 
-    public CourseCatalog() {
+    public CourseCatalog(InstructorManager instructorManager) {
         this.allCourses = new ArrayList<>();
+        this.instructorManager=instructorManager;
         loadCoursesFromCSV();
     }
 
     private void loadCoursesFromCSV() {
-        File file = new File(filePath);
+        File file = new File(coursesPath);
         if (!file.exists()) return;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(coursesPath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
 
-                String[] data = line.split(",");
-                                
-                Instructor inst = new Instructor(data[3], data[4], data[5],data[6],data[7]);
-                int credit = Integer.parseInt(data[2]);
-                
-                Course course;
-                if (data[6].equalsIgnoreCase("Mandatory")) {
-                    course = new MandatoryCourse(data[1], data[0], credit, inst);
-                } else {
-                    course = new ElectiveCourse(data[1], data[0], credit, inst);
-                }
-                allCourses.add(course);
+            String[] data = line.split(",");
+            if (data.length < 5) continue;
+
+            String courseName = data[0];
+            String courseCode = data[1];
+            int courseCredit = Integer.parseInt(data[2]);
+            String instructorID = data[3];
+            String courseType = data[4];
+
+            Instructor inst = instructorManager.findInstructorByID(instructorID);
+            Course course;
+            if (courseType.equalsIgnoreCase("Mandatory")) {
+                course = new MandatoryCourse(courseName, courseCode, courseCredit, inst);
+            } else {
+                course = new ElectiveCourse(courseName, courseCode, courseCredit, inst);
             }
+            allCourses.add(course);
+        }
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }
@@ -48,14 +55,12 @@ public class CourseCatalog {
     public void addCourse(Course course) {
         allCourses.add(course);
         
-        try (PrintWriter pw = new PrintWriter(new FileWriter(filePath, true))) {
-            String csvLine = String.format("%s,%s,%d,%s,%s,%s,%s",
-                course.getCourseCode(),
+        try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, true))) {
+            String csvLine = String.format("%s,%s,%d,%s,%s",
                 course.getCourseName(),
+                course.getCourseCode(),
                 course.getCourseCredit(),
-                course.getInstructor().getInstructorName(),
                 course.getInstructor().getInstructorID(),
-                course.getInstructor().getInstructorDepartment(),
                 course.getCourseType()
             );
             pw.println(csvLine);
