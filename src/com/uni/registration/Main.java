@@ -2,18 +2,21 @@ package com.uni.registration;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.uni.registration.projectServices.CourseCatalog;
+import com.uni.registration.projectServices.InstructorManager;
 import com.uni.registration.projectServices.StudentManager;
 import com.uni.registration.projectModels.Courses.*;
 import com.uni.registration.projectModels.Students.*;
 import com.uni.registration.projectModels.Instructor;
 import com.uni.registration.projectModels.Instructor.*;
 import com.uni.registration.projectServices.StudentManager;
+import com.uni.registration.projectServices.InstructorManager;
 
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         CourseCatalog catalog = new CourseCatalog();
         StudentManager studentmanager=new StudentManager();
+        InstructorManager instructorManager=new InstructorManager();
         Instructor loggedInInstructor = null; 
         Student loggedInStudent = null; 
         while (true) { 
@@ -196,7 +199,9 @@ public class Main {
                         System.out.println("Enter your password: ");
                         String instructorPassword=input.nextLine();
                         Instructor newInstructor=new Instructor(instructorName, instructorSurname, instructorID, instructorDepartment, instructorPassword);
-                        
+                        if(newInstructor!=null){
+                            instructorManager.addInstructor(newInstructor);
+                        }
                         break;
                     default:
                         System.out.println("Invalid selection.");
