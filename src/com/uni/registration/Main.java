@@ -183,7 +183,20 @@ public class Main {
                         }
                         break;
                     case 2:
+
                         System.out.println("---Instructor Register Page---");
+                        System.out.println("Enter your name: ");
+                        String instructorName=input.nextLine();
+                        System.out.println("Enter your surname: ");
+                        String instructorSurname=input.nextLine();
+                        System.out.println("Enter your ID: ");
+                        String instructorID=input.nextLine();
+                        System.out.println("Enter your department: ");
+                        String instructorDepartment=input.nextLine();
+                        System.out.println("Enter your password: ");
+                        String instructorPassword=input.nextLine();
+                        Instructor newInstructor=new Instructor(instructorName, instructorSurname, instructorID, instructorDepartment, instructorPassword);
+                        
                         break;
                     default:
                         System.out.println("Invalid selection.");
