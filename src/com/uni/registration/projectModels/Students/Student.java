@@ -8,14 +8,14 @@ import com.uni.registration.projectModels.Courses.Course;
 public abstract class Student implements Registrable{
     private String name;
     private String surname;
-    private String studentID;
+    private int studentID;
     private String department;
     private int year;
     private String password;
     protected ArrayList<Course> registeredCourse;
 
 
-    public Student(String name,String surname,String studentID,String department,int year,String password){
+    public Student(String name,String surname,int studentID,String department,int year,String password){
         this.name=name;
         this.surname=surname;
         this.studentID=studentID;
@@ -24,6 +24,9 @@ public abstract class Student implements Registrable{
         this.password=password;
         this.registeredCourse=new ArrayList<>();
     }
+
+    public abstract String getStudentType();
+
 
     @Override
     public void registerCourse(Course course){
@@ -62,10 +65,10 @@ public abstract class Student implements Registrable{
     }
     
 
-    public String getStudentID(){
+    public int getStudentID(){
         return studentID;
     }
-    public void setStudentID(String studentID){
+    public void setStudentID(int studentID){
         this.studentID=studentID;
     }
 

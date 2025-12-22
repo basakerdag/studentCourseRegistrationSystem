@@ -69,7 +69,7 @@ public class CourseCatalog {
         System.out.println("No courses available in the catalog.");
         return;
     }
-    System.out.println("\n--- Available Courses ---");
+    System.out.println("--- Available Courses ---");
     for (Course c : allCourses) {
         System.out.println("Code: " + c.getCourseCode() + " | Name: " + c.getCourseName() + " | Credit: " + c.getCourseCredit());
     }
