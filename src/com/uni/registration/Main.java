@@ -53,9 +53,9 @@ public class Main {
                         System.out.println("Enter your password: ");
                         int password=input.nextInt();
                         input.nextLine();
-                        //loggedInStudent=new Student("Name","Surname","");
-                        //daha sonra if else yapabilirim buraya
-                        System.out.println("---Student Dashboard---");
+                        boolean testUser=true; //şimdilik böyle kalsın
+                        while(testUser){
+                             System.out.println("---Student Dashboard---");
                         System.out.println("1.Browse Available Courses");
                         System.out.println("2.Enroll in a course");
                         System.out.println("3.View My Registered Courses");
@@ -63,7 +63,6 @@ public class Main {
                         System.out.println("5. Logout");
                         int dashboardChoice=input.nextInt();
                         input.nextLine();
-                        if(dashboardChoice==5){break;}
                         switch(dashboardChoice){
                             case 1:
                                 catalog.displayCourses();
@@ -92,8 +91,13 @@ public class Main {
                                 System.out.println("Number of Registered Courses: " + loggedInStudent.getRegisteredCourses().size());
                                 System.out.println("Total Amount to Pay: " + fee + " TL");
                                 break;
+                            case 5:
+                                testUser=false;
+                                break;
                         }
 
+                        }
+                       
                         break;
                     case 2:
                         System.out.println("---Student Register Page---");
