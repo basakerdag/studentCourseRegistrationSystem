@@ -149,24 +149,26 @@ public class Main {
                    System.out.println("Please select an option: ");
                    int instructorChoice=input.nextInt();
                    input.nextLine();
-                   if(instructorChoice==3){ break;}
                    switch(instructorChoice){
                     case 1:
                         System.out.println("---Instructor Login Page---");
                         System.out.print("Enter ID: ");
-                        String id = input.nextLine();
+                        int id = input.nextInt();
+                        input.nextLine();
                         System.out.print("Enter Password: ");
                         String password = input.nextLine();
-                        loggedInInstructor = new Instructor("Name", "Surname", id,"Department","Password");
-
-                        System.out.println("---Instructor Login Page");
+                        loggedInInstructor = instructorManager.login(id, password);
+                        if(loggedInInstructor!=null){
+                        System.out.println("Welcome "+ loggedInInstructor.getInstructorName());
+                        Boolean testInstructor=true;
+                        while(testInstructor){
+                            System.out.println("---Instructor Login Page");
                         System.out.println("1.View all courses");
                         System.out.println("2.Add new course");
                         System.out.println("3.Logout");
                         System.out.println("Please select an option.");
                         int instructorOp=input.nextInt();
                         input.nextLine();
-                        if (instructorOp==3){break;}
                         switch(instructorOp){
                             case 1:
                                 System.out.println("");
@@ -193,6 +195,14 @@ public class Main {
                                 if(newCourse!=null){
                                     catalog.addCourse(newCourse);
                                 }
+                                break;
+                            case 3:
+                                testInstructor=false;
+                          }
+                         }
+                        
+                        }else{
+                            System.out.println("System cannot find the user.");
                         }
                         break;
                     case 2:
@@ -203,7 +213,8 @@ public class Main {
                         System.out.println("Enter your surname: ");
                         String instructorSurname=input.nextLine();
                         System.out.println("Enter your ID: ");
-                        String instructorID=input.nextLine();
+                        int instructorID=input.nextInt();
+                        input.nextLine();
                         System.out.println("Enter your department: ");
                         String instructorDepartment=input.nextLine();
                         System.out.println("Enter your password: ");
@@ -217,6 +228,8 @@ public class Main {
                         System.out.println("Invalid selection.");
                    }
                     break;
+                    case 3:
+                        break;
                 default:
                     System.out.println("Invalid selection.");
             }

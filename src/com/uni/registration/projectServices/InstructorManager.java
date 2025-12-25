@@ -27,7 +27,7 @@ public class InstructorManager {
                 
                 String instructorName = data[0];
                 String instructorSurname = data[1];
-                String instructorID = data[2];
+                int instructorID = Integer.parseInt(data[2]);
                 String instructorDepartment = data[3];
                 String instructorPassword = data[4];
 
@@ -56,9 +56,18 @@ public class InstructorManager {
         }
     } 
 
-    public Instructor findInstructorByID(String ID){
+    public Instructor findInstructorByID(int ID){
         for(Instructor inst:instructors){
-            if(inst.getInstructorID().equals(ID)){
+            if(inst.getInstructorID() == ID){
+                return inst;
+            }
+        }
+        return null;
+    }
+
+    public Instructor login(int instructorID,String password){
+        for(Instructor inst:instructors){
+            if(inst.getInstructorID()==instructorID && inst.getPassword().equals(password)){
                 return inst;
             }
         }

@@ -3,11 +3,11 @@ package com.uni.registration.projectModels;
 public class Instructor{
     private String instructorName;
     private String instructorSurname;
-    private String instructorID;
+    private int instructorID;
     private String instructorDepartment;
     private String password;
 
-    public Instructor(String instructorName,String instructorSurname,String instructorID,String instructorDepartment,String password){
+    public Instructor(String instructorName,String instructorSurname,int instructorID,String instructorDepartment,String password){
         this.instructorName=instructorName;
         this.instructorSurname=instructorSurname;
         this.instructorID=instructorID;
@@ -29,10 +29,10 @@ public class Instructor{
         this.instructorSurname=instructorSurname;
     }
 
-    public String getInstructorID(){
+    public int getInstructorID(){
         return instructorID;
     }
-    public void setInstructorID(String instructorID){
+    public void setInstructorID(int instructorID){
         this.instructorID=instructorID;
     }
 

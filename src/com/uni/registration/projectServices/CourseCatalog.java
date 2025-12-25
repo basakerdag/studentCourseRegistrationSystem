@@ -35,7 +35,7 @@ public class CourseCatalog {
             String courseName = data[0];
             String courseCode = data[1];
             int courseCredit = Integer.parseInt(data[2]);
-            String instructorID = data[3];
+            int instructorID = Integer.parseInt(data[3]);
             String courseType = data[4];
 
             Instructor inst = instructorManager.findInstructorByID(instructorID);
