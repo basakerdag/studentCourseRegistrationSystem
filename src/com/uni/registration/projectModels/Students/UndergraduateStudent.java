@@ -1,3 +1,8 @@
+/**
+   *UndergraduateStudent class representing a bachelor level student.
+   *Tuition is determined by the total credits of their registered courses.   
+ */
+
 package com.uni.registration.projectModels.Students;
 import com.uni.registration.projectModels.Courses.*;
 
@@ -10,7 +15,10 @@ public class UndergraduateStudent extends Student{
     public String getStudentType(){
         return "Undergraduate Student";
     }
-    
+    /*
+      Calculates tuition for undergraduates: Total credits multiplied by credit price.
+      * @return The total tuition amount based on credit load.
+     */
     @Override
     public double calculateTuition(){
         int totalCredits=0;
