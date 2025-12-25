@@ -53,7 +53,10 @@ public class CourseCatalog {
     }
 
     public void addCourse(Course course) {
-        allCourses.add(course);
+        if(findCourseByCode(course.getCourseCode())!=null){
+            System.out.println("Error:A course with this code"+ course.getCourseCode()+"already exists.");
+        }else{
+                    allCourses.add(course);
         
         try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, true))) {
             String csvLine = String.format("%s,%s,%d,%s,%s",
@@ -67,6 +70,10 @@ public class CourseCatalog {
         } catch (IOException e) {
             System.err.println("Error saving to file: " + e.getMessage());
         }
+
+        }
+
+
     }
 
     public void displayCourses() {
