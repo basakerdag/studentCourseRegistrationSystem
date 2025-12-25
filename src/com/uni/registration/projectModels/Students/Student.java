@@ -2,6 +2,7 @@ package com.uni.registration.projectModels.Students;
 import java.util.ArrayList;
 
 import com.uni.registration.projectModels.Registrable;
+import com.uni.registration.projectModels.Registration;
 import com.uni.registration.projectModels.Courses.Course;
 
 
@@ -33,6 +34,7 @@ public abstract class Student implements Registrable{
         if(!registeredCourse.contains(course)){
             registeredCourse.add(course);
             System.out.println(course.getCourseName()+"has been successfully added.");
+            new Registration(this, course);
         }else{
             System.out.println("Error: The course with code "+ course.getCourseCode()+ " is already in your list.");
         }
@@ -42,6 +44,7 @@ public abstract class Student implements Registrable{
     public void unregisterCourse(Course course){
         if(registeredCourse.contains(course)){
             registeredCourse.remove(course);
+            Registration.stCrsRemoveFromCsv(this.getStudentID(),course.getCourseCode());
             System.out.println(course.getCourseName()+"registration has been removed.");
         }else{
             System.out.println("Error: This course is not in your list.");
