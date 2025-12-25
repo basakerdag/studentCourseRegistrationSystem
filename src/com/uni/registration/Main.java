@@ -3,13 +3,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import com.uni.registration.projectServices.CourseCatalog;
 import com.uni.registration.projectServices.InstructorManager;
+import com.uni.registration.projectServices.RegistrationManager;
 import com.uni.registration.projectServices.StudentManager;
 import com.uni.registration.projectModels.Courses.*;
 import com.uni.registration.projectModels.Students.*;
 import com.uni.registration.projectModels.Instructor;
-import com.uni.registration.projectModels.Instructor.*;
-import com.uni.registration.projectServices.StudentManager;
-import com.uni.registration.projectServices.InstructorManager;
+import com.uni.registration.projectModels.Registration;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,6 +16,7 @@ public class Main {
         InstructorManager instructorManager=new InstructorManager();
         CourseCatalog catalog = new CourseCatalog(instructorManager);
         StudentManager studentManager=new StudentManager();
+        Registration.loadEnrollments(studentManager,catalog);
         Instructor loggedInInstructor = null; 
         Student loggedInStudent = null; 
         while (true) { 

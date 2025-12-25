@@ -1,6 +1,8 @@
 package com.uni.registration.projectModels;
 import com.uni.registration.projectModels.Courses.*;
 import com.uni.registration.projectModels.Students.*;
+import com.uni.registration.projectServices.CourseCatalog;
+import com.uni.registration.projectServices.StudentManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -79,6 +81,32 @@ public class Registration {
     } catch (IOException e) {
         System.err.println("Error updating enrollments file: " + e.getMessage());
     }      
+    }
+
+    public static void loadEnrollments(StudentManager studentManager,CourseCatalog courseCatalog){
+    java.io.File file = new java.io.File(enrollmentCsv);
+    if (!file.exists()) return;
+
+    try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(enrollmentCsv))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split(",");
+            if (data.length < 2) continue;
+            int studentID = Integer.parseInt(data[0]);
+            String courseCode = data[1];
+
+            Student student = studentManager.findStudentByID(studentID);
+            Course course = courseCatalog.findCourseByCode(courseCode);
+            if (student != null && course != null) {
+                if (!student.getRegisteredCourses().contains(course)) {
+                    student.getRegisteredCourses().add(course);
+                }
+            }
+        }
+        System.out.println("Enrollment data successfully recovered from CSV.");
+    } catch (java.io.IOException e) {
+        System.err.println("Error while recovering enrollments: " + e.getMessage());
+    }
     }
 
 }

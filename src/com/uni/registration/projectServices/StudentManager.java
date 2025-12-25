@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.uni.registration.projectModels.Courses.Course;
 import com.uni.registration.projectModels.Students.*;
 
 
@@ -75,5 +77,14 @@ public class StudentManager {
         }
         return null;
     }
-
+        public Student findStudentByID(int ID) {
+        for (Student s : students) {
+            if (s.getStudentID()==ID) {
+                return s;
+            }
+        }
+        return null;
+    }
 }
+
+
