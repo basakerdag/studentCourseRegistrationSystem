@@ -17,7 +17,7 @@ public class StudentManager {
         this.students = new ArrayList<>();
         loadFromStudentCsv();
     }
-
+   
     public void loadFromStudentCsv(){
      try(BufferedReader br=new BufferedReader(new FileReader(studentsFile))){
         String line;
@@ -48,9 +48,6 @@ public class StudentManager {
     }
    
 } 
-
-
-
     public void addStudent(Student student) {
         students.add(student);
         try(PrintWriter pw=new PrintWriter(new FileWriter(studentsFile,true))){
@@ -68,6 +65,15 @@ public class StudentManager {
             System.err.println("Error saving to file: " + e.getMessage());
         }
         System.out.println("Student saved to system.");
+    }
+
+    public Student login(int studentID,String studentPassword){
+        for(Student s: students){
+            if(s.getStudentID()==studentID && s.getPassword().equals(studentPassword)){
+                return s;
+            }
+        }
+        return null;
     }
 
 }

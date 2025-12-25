@@ -14,9 +14,9 @@ import com.uni.registration.projectServices.InstructorManager;
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        CourseCatalog catalog = new CourseCatalog();
-        StudentManager studentmanager=new StudentManager();
         InstructorManager instructorManager=new InstructorManager();
+        CourseCatalog catalog = new CourseCatalog(instructorManager);
+        StudentManager studentManager=new StudentManager();
         Instructor loggedInInstructor = null; 
         Student loggedInStudent = null; 
         while (true) { 
@@ -51,9 +51,11 @@ public class Main {
                         int studentID=input.nextInt();
                         input.nextLine();
                         System.out.println("Enter your password: ");
-                        int password=input.nextInt();
-                        input.nextLine();
-                        boolean testUser=true; //şimdilik böyle kalsın
+                        String password=input.nextLine();                    
+                        loggedInStudent = studentManager.login(studentID, password);
+                        if (loggedInStudent != null) {
+                            System.out.println("Welcome  " + loggedInStudent.getName());
+                        boolean testUser = true;
                         while(testUser){
                              System.out.println("---Student Dashboard---");
                         System.out.println("1.Browse Available Courses");
@@ -94,8 +96,12 @@ public class Main {
                             case 5:
                                 testUser=false;
                                 break;
-                        }
-
+                            
+                          }
+ 
+                          }
+                        }else{
+                            System.out.println("System cannot find the user.");
                         }
                        
                         break;
@@ -127,7 +133,7 @@ public class Main {
                         }
 
                         if(newStudent!=null){
-                            studentmanager.addStudent(newStudent);
+                            studentManager.addStudent(newStudent);
                         }
                         break;
                     default:
