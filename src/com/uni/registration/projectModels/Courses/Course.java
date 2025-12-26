@@ -1,5 +1,5 @@
 package com.uni.registration.projectModels.Courses;
-
+import java.time.LocalTime;
 import com.uni.registration.projectModels.Instructor;
 
 public abstract class Course{
@@ -9,14 +9,21 @@ public abstract class Course{
     private Instructor instructor;
     private int courseCapacity;
     private int courseEnrolledCount;
+    private String courseDay;
+    private LocalTime courseStartHour;
+    private LocalTime courseEndHour;
 
-    public Course (String courseName,String courseCode,int courseCredit,Instructor instructor,int courseCapacity,int courseEnrolledCount){
+    public Course (String courseName,String courseCode,int courseCredit,Instructor instructor,int courseCapacity,int courseEnrolledCount,String courseDay,
+        LocalTime courseStartHour,LocalTime courseEndHour){
         this.courseName=courseName;
         this.courseCode=courseCode;
         this.courseCredit=courseCredit;
         this.instructor=instructor;
         this.courseCapacity=courseCapacity;
         this.courseEnrolledCount=0;
+        this.courseDay=courseDay;
+        this.courseStartHour=courseStartHour;
+        this.courseEndHour=courseEndHour;
     }
 
     public abstract String getCourseType();
@@ -69,6 +76,32 @@ public abstract class Course{
             courseEnrolledCount++;
         }
     }
+    
+    public String getCourseDay(){
+        return courseDay;
+    }
+    public void setCourseDay(String courseDay){
+        this.courseDay=courseDay;
+    }
+
+    public LocalTime getCourseStartHour(){
+        return courseStartHour;
+    }
+    public void setCourseStartHour(LocalTime courseStartHour){
+        this.courseStartHour=courseStartHour;
+    }
+
+    public LocalTime getCourseEndHour(){
+        return courseEndHour;
+    }
+    public void setCourseEndHour(LocalTime courseEndHour){
+        if(this.courseStartHour!=null && courseEndHour.isBefore(this.courseEndHour)){
+            System.out.println("Course end hour cannot be before course start hour");
+        }else{
+            this.courseEndHour=courseEndHour;
+        }
+    }
+
 
 
      @Override

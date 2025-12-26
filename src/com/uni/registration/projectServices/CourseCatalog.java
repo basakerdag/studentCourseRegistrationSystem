@@ -6,6 +6,8 @@ import com.uni.registration.projectModels.Courses.ElectiveCourse;
 import com.uni.registration.projectModels.Courses.MandatoryCourse;
 import com.uni.registration.projectServices.InstructorManager;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +41,15 @@ public class CourseCatalog {
             String courseType = data[4];
             int courseCapacity=Integer.parseInt(data[5]);
             int courseEnrolledCount=Integer.parseInt(data[6]);
-
+            String courseDay=data[7];
+            LocalTime courseStartHour=LocalTime.parse(data[8]);
+            LocalTime courseEndHour=LocalTime.parse(data[9]);
             Instructor inst = instructorManager.findInstructorByID(instructorID);
             Course course;
             if (courseType.equalsIgnoreCase("Mandatory")) {
-                course = new MandatoryCourse(courseName, courseCode, courseCredit, inst,courseCapacity,courseEnrolledCount);
+                course = new MandatoryCourse(courseName, courseCode, courseCredit, inst,courseCapacity,courseEnrolledCount,courseDay,courseStartHour,courseEndHour);
             } else {
-                course = new ElectiveCourse(courseName, courseCode, courseCredit, inst,courseCapacity,courseEnrolledCount);
+                course = new ElectiveCourse(courseName, courseCode, courseCredit, inst,courseCapacity,courseEnrolledCount,courseDay,courseStartHour,courseEndHour);
             }
             allCourses.add(course);
         }

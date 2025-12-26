@@ -48,18 +48,42 @@ public class Registration {
         this.registrationDate=registrationDate;
     }
 
+    private boolean isScheduleConflicting(Student student,Course newCourse){
+        for(Course registeredCourse:student.getRegisteredCourses()){
+            if(registeredCourse.getCourseDay().equalsIgnoreCase(newCourse.getCourseDay())){
+                boolean overlaps=newCourse.getCourseStartHour().isBefore(registeredCourse.getCourseEndHour()) &&
+                registeredCourse.getCourseStartHour().isBefore(newCourse.getCourseEndHour());
+                if(overlaps){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
     public void registerCourse(Student student,Course course){
         if(course.getCourseEnrolledCount()>=course.getCourseCapacity()){
             System.out.println("Warning!"+course.getCourseName()+"is full.");
             return;
-        }else{
+        }
+        if(isScheduleConflicting(student, course)){
+            System.out.println("Warning: Schedule conflict! You already have another course on "+ course.getCourseDay() +" beetween "+
+            course.getCourseStartHour()+" and "+course.getCourseEndHour()+".");
+            return;
+        }
+        
+        
             student.getRegisteredCourses().add(course);
             course.incrementEnrolledCourse();
             this.student=student;
             this.course=course;
             stCrsSaveToCsv();
             System.out.println("Registration successful.");
-        }
+        
     }
     
     

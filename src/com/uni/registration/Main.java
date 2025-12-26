@@ -1,4 +1,5 @@
 package com.uni.registration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.uni.registration.projectServices.CourseCatalog;
@@ -190,11 +191,17 @@ public class Main {
                                 int courseCapacity=input.nextInt();
                                 input.nextLine();
                                 int initialEnrolledCount = 0;
+                                System.out.println("Enter course day: ");
+                                String courseDay=input.nextLine();
+                                System.out.println("Enter course start time: ");
+                                LocalTime courseStartHour=LocalTime.parse(input.nextLine());
+                                System.out.println("Enter course end time: ");
+                                LocalTime courseEndHour=LocalTime.parse(input.nextLine());
                                 Course newCourse=null;
                                 if (addCourseOption==1){
-                                      newCourse=new MandatoryCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount);
+                                      newCourse=new MandatoryCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount,courseDay,courseStartHour,courseEndHour);
                                 } else if(addCourseOption==2){
-                                     newCourse=new ElectiveCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount);
+                                     newCourse=new ElectiveCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount,courseDay,courseStartHour,courseEndHour);
                                 }
                                 if(newCourse!=null){
                                     catalog.addCourse(newCourse);
