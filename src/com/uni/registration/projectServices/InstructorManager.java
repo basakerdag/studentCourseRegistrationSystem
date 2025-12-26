@@ -39,6 +39,23 @@ public class InstructorManager {
         }
     } 
 
+    public void saveAllInstructorsToCsv(){
+        try(PrintWriter pw=new PrintWriter(new FileWriter(instructorFile,false))){
+            for(Instructor inst:instructors){
+                String csvLine= String.format("%s,%s,%s,%s,%s",
+                inst.getInstructorName(),
+                inst.getInstructorSurname(),
+                inst.getInstructorID(),
+                inst.getInstructorDepartment(),
+                inst.getPassword()
+                );
+                pw.println(csvLine);
+            }
+        }catch(IOException e){
+            System.err.println(" Error: Could not update instructors file: " + e.getMessage());
+        }
+    }
+
     public void addInstructor(Instructor instructor) {
         instructors.add(instructor); 
         try (PrintWriter pw = new PrintWriter(new FileWriter(instructorFile, true))) {

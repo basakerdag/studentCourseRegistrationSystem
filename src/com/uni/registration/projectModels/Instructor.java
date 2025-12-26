@@ -55,4 +55,19 @@ public class Instructor{
     return "Instructor: " + instructorName + " (ID: " + instructorID + ")";
      }
 
+    public boolean changeInstructorPassword(String currentInstructorPassword, String newInstructorPassword){
+        if(!this.password.equals(currentInstructorPassword)){
+            System.out.println("Current password is incorrect.");
+            return false;
+        }
+        if(currentInstructorPassword.equals(newInstructorPassword)){
+            System.out.println("New password cannot be equal current password.");
+            return false;
+        }
+
+        this.password=newInstructorPassword;
+        System.out.println("Password changed successfully.");
+        return true;
+    }
+
 }

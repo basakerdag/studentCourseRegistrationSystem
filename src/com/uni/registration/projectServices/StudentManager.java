@@ -59,7 +59,7 @@ public class StudentManager {
                 s.getStudentID(),
                 s.getDepartment(),
                 s.getYear(),
-                s.getPassword(), 
+                s.getPassword(),  
                 s.getStudentType() 
             );
             pw.println(csvLine);

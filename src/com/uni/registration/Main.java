@@ -100,8 +100,8 @@ public class Main {
                                 String currentStudentPassword=input.nextLine();
                                 System.out.println("Enter your new password: ");
                                 String newStudentPassword=input.nextLine();
-                                boolean isChanged=loggedInStudent.changeStudentPassword(currentStudentPassword,newStudentPassword);
-                                if(isChanged){
+                                boolean isStudentChanged=loggedInStudent.changeStudentPassword(currentStudentPassword,newStudentPassword);
+                                if(isStudentChanged){
                                     studentManager.saveAllStudentsToCsv();
                                     System.out.println("Your account security has been updated.");
                                 }else{
@@ -223,7 +223,18 @@ public class Main {
                                 }
                                 break;
                             case 3:
-                                //
+                                System.out.println("Enter your current password: ");
+                                String currentInstructorPassword=input.nextLine();
+                                System.out.println("Enter your new password: ");
+                                String newInstructorPassword=input.nextLine();
+                                boolean isInstructorChanged=loggedInInstructor.changeInstructorPassword(currentInstructorPassword,newInstructorPassword);
+                                if(isInstructorChanged){
+                                    instructorManager.saveAllInstructorsToCsv();
+                                    System.out.println("Your account security has been updated.");
+                                }else{
+                                    System.out.println("Password change failed. Please try again.");
+                                }
+                                break;
                             case 4:
                                 testInstructor=false;
                           }
