@@ -50,6 +50,24 @@ public class StudentManager {
     }
    
 } 
+   public void saveAllStudentsToCsv() {
+    try (PrintWriter pw = new PrintWriter(new FileWriter(studentsFile, false))) {
+        for (Student s : students) {
+            String csvLine = String.format("%s,%s,%d,%s,%d,%s,%s",
+                s.getName(),
+                s.getSurname(),
+                s.getStudentID(),
+                s.getDepartment(),
+                s.getYear(),
+                s.getPassword(), 
+                s.getStudentType() 
+            );
+            pw.println(csvLine);
+        }
+    } catch (IOException e) {
+        System.err.println(" Error: Could not update students file: " + e.getMessage());
+    }
+} 
     public void addStudent(Student student) {
         students.add(student);
         try(PrintWriter pw=new PrintWriter(new FileWriter(studentsFile,true))){
@@ -77,6 +95,7 @@ public class StudentManager {
         }
         return null;
     }
+
         public Student findStudentByID(int ID) {
         for (Student s : students) {
             if (s.getStudentID()==ID) {
@@ -85,6 +104,8 @@ public class StudentManager {
         }
         return null;
     }
+
+
 }
 
 

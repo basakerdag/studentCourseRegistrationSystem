@@ -104,6 +104,21 @@ public abstract class Student implements Registrable{
         return registeredCourse.contains(course);
     }
 
+    public boolean changeStudentPassword(String currentStudentPassword,String newSStudentPassword){
+        if(!this.password.equals(currentStudentPassword)){
+            System.out.println("Current password is incorrect.");
+            return false;
+        }
+        if(newSStudentPassword.equals(currentStudentPassword)){
+           System.out.println("New password cannot be equal current password.");
+           return false;
+        }
+
+        this.password=newSStudentPassword;
+        System.out.println("Password changed succesfully.");
+        return true;
+    }
+ 
 
 }
 

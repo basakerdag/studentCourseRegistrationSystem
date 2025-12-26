@@ -62,8 +62,9 @@ public class Main {
                         System.out.println("1.Browse Available Courses");
                         System.out.println("2.Enroll in a course");
                         System.out.println("3.View My Registered Courses");
-                        System.out.println("4. Display Tuition Fee");     
-                        System.out.println("5. Logout");
+                        System.out.println("4. Display Tuition Fee"); 
+                        System.out.println("5. Change Password ");    
+                        System.out.println("6. Logout");
                         int dashboardChoice=input.nextInt();
                         input.nextLine();
                         switch(dashboardChoice){
@@ -95,6 +96,19 @@ public class Main {
                                 System.out.println("Total Amount to Pay: " + fee + " TL");
                                 break;
                             case 5:
+                                System.out.println("Enter your current password: ");
+                                String currentStudentPassword=input.nextLine();
+                                System.out.println("Enter your new password: ");
+                                String newStudentPassword=input.nextLine();
+                                boolean isChanged=loggedInStudent.changeStudentPassword(currentStudentPassword,newStudentPassword);
+                                if(isChanged){
+                                    studentManager.saveAllStudentsToCsv();
+                                    System.out.println("Your account security has been updated.");
+                                }else{
+                                    System.out.println("Password change failed. Please try again.");
+                                }
+                                break;
+                            case 6:
                                 testUser=false;
                                 break;
                             
@@ -166,7 +180,8 @@ public class Main {
                             System.out.println("---Instructor Login Page");
                         System.out.println("1.View all courses");
                         System.out.println("2.Add new course");
-                        System.out.println("3.Logout");
+                        System.out.println("3.Change Password");
+                        System.out.println("4.Logout");
                         System.out.println("Please select an option.");
                         int instructorOp=input.nextInt();
                         input.nextLine();
@@ -208,6 +223,8 @@ public class Main {
                                 }
                                 break;
                             case 3:
+                                //
+                            case 4:
                                 testInstructor=false;
                           }
                          }
