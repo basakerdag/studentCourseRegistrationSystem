@@ -186,11 +186,15 @@ public class Main {
                                 System.out.println("What type of course do you want to add (1-Mandatory , 2-Elective)?");
                                 int addCourseOption=input.nextInt();
                                 input.nextLine();
+                                System.out.println("Enter course capacity: ");
+                                int courseCapacity=input.nextInt();
+                                input.nextLine();
+                                int initialEnrolledCount = 0;
                                 Course newCourse=null;
                                 if (addCourseOption==1){
-                                      newCourse=new MandatoryCourse(courseName, courseCode, courseCredit, loggedInInstructor);
+                                      newCourse=new MandatoryCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount);
                                 } else if(addCourseOption==2){
-                                     newCourse=new ElectiveCourse(courseName, courseCode, courseCredit, loggedInInstructor);
+                                     newCourse=new ElectiveCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount);
                                 }
                                 if(newCourse!=null){
                                     catalog.addCourse(newCourse);

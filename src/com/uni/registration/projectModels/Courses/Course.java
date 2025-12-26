@@ -7,12 +7,16 @@ public abstract class Course{
     private String courseCode;
     protected int courseCredit;
     private Instructor instructor;
+    private int courseCapacity;
+    private int courseEnrolledCount;
 
-    public Course (String courseName,String courseCode,int courseCredit,Instructor instructor){
+    public Course (String courseName,String courseCode,int courseCredit,Instructor instructor,int courseCapacity,int courseEnrolledCount){
         this.courseName=courseName;
         this.courseCode=courseCode;
         this.courseCredit=courseCredit;
         this.instructor=instructor;
+        this.courseCapacity=courseCapacity;
+        this.courseEnrolledCount=0;
     }
 
     public abstract String getCourseType();
@@ -45,6 +49,27 @@ public abstract class Course{
     public void setInstructor(Instructor instructor){
         this.instructor=instructor;
     }
+
+    public int getCourseCapacity(){
+        return courseCapacity;
+    }
+    public void setCourseCapacity(int courseCapacity){
+        if(courseCapacity>=this.courseEnrolledCount){
+           this.courseCapacity=courseCapacity;
+        }else{
+            System.out.println("Course capacity cannot be less than the current number of enrolled students.");
+        }
+    }
+
+    public int getCourseEnrolledCount(){
+        return courseEnrolledCount;
+    }
+    public void incrementEnrolledCourse(){
+        if (courseEnrolledCount<courseCapacity){
+            courseEnrolledCount++;
+        }
+    }
+
 
      @Override
     public boolean equals(Object o) {

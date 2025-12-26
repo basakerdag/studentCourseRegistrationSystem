@@ -30,20 +30,22 @@ public class CourseCatalog {
                 if (line.trim().isEmpty()) continue;
 
             String[] data = line.split(",");
-            if (data.length < 5) continue;
+            if (data.length < 7) continue;
 
             String courseName = data[0];
             String courseCode = data[1];
             int courseCredit = Integer.parseInt(data[2]);
             int instructorID = Integer.parseInt(data[3]);
             String courseType = data[4];
+            int courseCapacity=Integer.parseInt(data[5]);
+            int courseEnrolledCount=Integer.parseInt(data[6]);
 
             Instructor inst = instructorManager.findInstructorByID(instructorID);
             Course course;
             if (courseType.equalsIgnoreCase("Mandatory")) {
-                course = new MandatoryCourse(courseName, courseCode, courseCredit, inst);
+                course = new MandatoryCourse(courseName, courseCode, courseCredit, inst,courseCapacity,courseEnrolledCount);
             } else {
-                course = new ElectiveCourse(courseName, courseCode, courseCredit, inst);
+                course = new ElectiveCourse(courseName, courseCode, courseCredit, inst,courseCapacity,courseEnrolledCount);
             }
             allCourses.add(course);
         }
@@ -59,12 +61,14 @@ public class CourseCatalog {
                     allCourses.add(course);
         
         try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, true))) {
-            String csvLine = String.format("%s,%s,%d,%s,%s",
+            String csvLine = String.format("%s,%s,%d,%s,%s,%d,%d",
                 course.getCourseName(),
                 course.getCourseCode(),
                 course.getCourseCredit(),
                 course.getInstructor().getInstructorID(),
-                course.getCourseType()
+                course.getCourseType(),
+                course.getCourseCapacity(),
+                course.getCourseEnrolledCount()
             );
             pw.println(csvLine);
         } catch (IOException e) {

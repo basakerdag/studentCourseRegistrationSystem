@@ -25,7 +25,6 @@ public class Registration {
         this.student=student;
         this.course=course;
         this.registrationDate=LocalDate.now();
-        stCrsSaveToCsv();
     }
 
     public Student getStudent(){
@@ -49,6 +48,22 @@ public class Registration {
         this.registrationDate=registrationDate;
     }
 
+    public void registerCourse(Student student,Course course){
+        if(course.getCourseEnrolledCount()>=course.getCourseCapacity()){
+            System.out.println("Warning!"+course.getCourseName()+"is full.");
+            return;
+        }else{
+            student.getRegisteredCourses().add(course);
+            course.incrementEnrolledCourse();
+            this.student=student;
+            this.course=course;
+            stCrsSaveToCsv();
+            System.out.println("Registration successful.");
+        }
+    }
+    
+    
+
     public void stCrsSaveToCsv(){
         try (PrintWriter pw = new PrintWriter(new FileWriter(enrollmentCsv, true))) {
             pw.println(student.getStudentID() + "," + course.getCourseCode() + "," + registrationDate);
@@ -57,6 +72,8 @@ public class Registration {
         }
     }
 
+
+    
     public static void stCrsRemoveFromCsv(int studentID,String courseCode){
     List<String> remainingEnrollments = new ArrayList<>();
 
@@ -100,6 +117,7 @@ public class Registration {
             if (student != null && course != null) {
                 if (!student.getRegisteredCourses().contains(course)) {
                     student.getRegisteredCourses().add(course);
+                    course.incrementEnrolledCourse();
                 }
             }
         }
@@ -108,5 +126,7 @@ public class Registration {
         System.err.println("Error while recovering enrollments: " + e.getMessage());
     }
     }
+
+    
 
 }
