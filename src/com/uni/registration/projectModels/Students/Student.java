@@ -51,6 +51,19 @@ public abstract class Student implements Registrable{
         }
     }
 
+    @Override
+    public void viewRegisteredCourses() {
+    System.out.println("\n--- Registered Courses for " + this.getName() + " ---");   
+    if (this.getRegisteredCourses().isEmpty()) {
+        System.out.println("You are not registered for any courses yet.");
+    } else {    
+        for (Course c : this.getRegisteredCourses()) {
+            System.out.println("- [" + c.getCourseCode() + "] " + c.getCourseName() +  " (" + c.getCourseCredit() + " Credits)");
+        }
+    }
+    System.out.println("------------------------------------------");
+}
+
     public abstract double calculateTuition();
 
     public String getName(){

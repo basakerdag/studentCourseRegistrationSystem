@@ -81,15 +81,7 @@ public class Main {
                                 loggedInStudent.getRegisteredCourses().add(course);
                                 break;
                             case 3:
-                                System.out.println("Your registered course : ");
-                                ArrayList<Course> registered=loggedInStudent.getRegisteredCourses();
-                                if(registered.isEmpty()){
-                                    System.out.println("You haven't registered for any courses yet.");
-                                }else{
-                                  for(Course c:registered){
-                                    System.out.println("- " + c.getCourseCode() + ": " + c.getCourseName());
-                                  }
-                                }
+                                loggedInStudent.viewRegisteredCourses();
                                 break;
                             case 4:
                                 System.out.println("Display Tuition Fee");  
