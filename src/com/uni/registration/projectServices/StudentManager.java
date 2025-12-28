@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.uni.registration.projectModels.Registration;
 import com.uni.registration.projectModels.Courses.Course;
 import com.uni.registration.projectModels.Students.*;
 
@@ -104,6 +105,24 @@ public class StudentManager {
         }
         return null;
     }
+
+   public void removeCourseFromAllStudents(String courseCode) {
+    for (Student s : students) {        
+        List<Course> registered = s.getRegisteredCourses();
+        Course courseToRemove = null;
+        for (Course c : registered) {
+            if (c.getCourseCode().equalsIgnoreCase(courseCode)) {
+                courseToRemove = c; 
+                break;
+            }
+        }
+        if (courseToRemove != null) {
+            registered.remove(courseToRemove);
+        }
+    }
+
+    Registration.removeAllEnrollmentsForCourse(courseCode);
+}
 
 
 }

@@ -161,6 +161,31 @@ public class Registration {
         }
     }
 
+    public static void removeAllEnrollmentsForCourse(String courseCode) {
+    List<String> remainingEnrollments = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(enrollmentCsv))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            if(line.trim().isEmpty()) continue;
+            String[] data = line.split(",");
+            String cCode = data[1];
+
+            if (!(cCode.equalsIgnoreCase(courseCode))) {
+                remainingEnrollments.add(line);
+            }
+        }
+    } catch (IOException e) {
+        System.err.println("Error reading enrollments for deletion: " + e.getMessage());
+    }
+    try (PrintWriter pw = new PrintWriter(new FileWriter(enrollmentCsv, false))) {
+        for (String record : remainingEnrollments) {
+            pw.println(record);
+        }
+    } catch (IOException e) {
+        System.err.println("Error updating enrollments file: " + e.getMessage());
+    }      
+    }
+
     
 
 }

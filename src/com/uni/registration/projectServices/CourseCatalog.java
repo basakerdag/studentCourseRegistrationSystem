@@ -80,8 +80,29 @@ public class CourseCatalog {
         }
 
         }
+    }
 
-
+    public void saveCoursesToCsv(){
+        try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, false))) {
+        for (Course c : allCourses) {
+            String csvLine = String.format("%s,%s,%d,%d,%s,%d,%d,%s,%s,%s",
+                c.getCourseName(),
+                c.getCourseCode(),
+                c.getCourseCredit(),
+                c.getInstructor().getInstructorID(),
+                (c instanceof MandatoryCourse ? "Mandatory" : "Elective"),
+                c.getCourseCapacity(),
+                c.getCourseEnrolledCount(),
+                c.getCourseDay(),
+                c.getCourseStartHour().toString(),
+                c.getCourseEndHour().toString()
+            );
+            pw.println(csvLine);
+        }
+        System.out.println("Courses database successfully synced.");
+    } catch (IOException e) {
+        System.err.println("Error: Could not update courses file: " + e.getMessage());
+    }
     }
 
     public void displayCourses() {
@@ -106,5 +127,13 @@ public class CourseCatalog {
             }
         }
         return null;
+    }
+
+    public void removeCourseFromCatalog(Course course){
+        if(allCourses.remove(course)){
+            saveCoursesToCsv();
+            System.out.println("Course " + course.getCourseCode() + " removed from catalog.");
+        
+        }
     }
 }

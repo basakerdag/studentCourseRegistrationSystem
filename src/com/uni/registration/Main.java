@@ -198,10 +198,11 @@ public class Main {
                         Boolean testInstructor=true;
                         while(testInstructor){
                             System.out.println("---Instructor Login Page");
-                        System.out.println("1.View all courses");
-                        System.out.println("2.Add new course");
-                        System.out.println("3.Change Password");
-                        System.out.println("4.Logout");
+                        System.out.println("1. View all courses");
+                        System.out.println("2. Add new course");
+                        System.out.println("3. Change Password");
+                        System.out.println("4. Drop courses ");
+                        System.out.println("5. Logout");
                         System.out.println("Please select an option.");
                         int instructorOp=input.nextInt();
                         input.nextLine();
@@ -255,7 +256,31 @@ public class Main {
                                     System.out.println("Password change failed. Please try again.");
                                 }
                                 break;
-                            case 4:
+                            case 4: 
+                                System.out.println("\n--- Your Active Courses ---");
+                                boolean hasCourse = false;    
+                                for (Course c : catalog.getAllCourses()) {
+                                  if (c.getInstructor().getInstructorID() == loggedInInstructor.getInstructorID()) {
+                                     System.out.println("- [" + c.getCourseCode() + "] " + c.getCourseName());
+                                     hasCourse = true;
+                                         }
+                                }
+                                if (!hasCourse) {
+                                   System.out.println("You don't have any courses to delete.");
+                                } else {
+                                   System.out.print("\nEnter the Course Code to delete: ");
+                                   String code = input.nextLine();
+                                   Course courseToDelete = catalog.findCourseByCode(code);
+                                  if (courseToDelete != null && courseToDelete.getInstructor().getInstructorID() == loggedInInstructor.getInstructorID()) { 
+                                      catalog.removeCourseFromCatalog(courseToDelete);
+                                      studentManager.removeCourseFromAllStudents(code);
+                                      System.out.println("The course and all its enrollments have been cleared.");
+                                 } else {
+                                      System.out.println("Error: Course not found or you are not authorized to delete it.");
+                                    }
+                                }
+                                break;                             
+                            case 5:
                                 testInstructor=false;
                           }
                          }
