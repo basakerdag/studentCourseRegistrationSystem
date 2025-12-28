@@ -77,8 +77,19 @@ public class Main {
                                 System.out.println("---Enroll in a course---");
                                 System.out.println("Enter the course code you want to register for: ");
                                 String registerCourse=input.nextLine();
-                                Course course=catalog.findCourseByCode(registerCourse);
-                                loggedInStudent.getRegisteredCourses().add(course);
+                                Course selectedCourse=catalog.findCourseByCode(registerCourse);
+                                if(selectedCourse==null){
+                                    System.out.println("Error: Course not found in the catalog.");
+                                }else{
+                                    if(loggedInStudent.hasScheduleConflict(selectedCourse)){
+                                        System.out.println("Warning: Schedule conflict! You have another course at this time.");
+                                    }else if(loggedInStudent.isRegistered(selectedCourse.getCourseCode())){
+                                        System.out.println("Warning: You are already registered for this course.");                            
+                                    }else{
+                                        loggedInStudent.registerCourse(selectedCourse);
+                                    }
+                                }
+                               
                                 break;
                             case 3:
                                 loggedInStudent.viewRegisteredCourses();

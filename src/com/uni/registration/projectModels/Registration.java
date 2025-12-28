@@ -30,25 +30,14 @@ public class Registration {
     public Student getStudent(){
         return student;
     }
-    public void setStudent(Student student){
-        this.student=student;
-    }
-
     public Course getCourse(){
         return course;
     }
-    public void setCourse(Course course){
-        this.course=course;
-    }
-
     public LocalDate getRegistrationDate(){
         return registrationDate;
     }
-    public void setDate(LocalDate registrationDate){
-        this.registrationDate=registrationDate;
-    }
 
-    private boolean isScheduleConflicting(Student student,Course newCourse){
+    public boolean isScheduleConflicting(Student student,Course newCourse){
         for(Course registeredCourse:student.getRegisteredCourses()){
             if(registeredCourse.getCourseDay().equalsIgnoreCase(newCourse.getCourseDay())){
                 boolean overlaps=newCourse.getCourseStartHour().isBefore(registeredCourse.getCourseEndHour()) &&

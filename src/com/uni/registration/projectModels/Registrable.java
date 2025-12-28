@@ -6,4 +6,6 @@ public interface Registrable{
     void registerCourse(Course course);
     void unregisterCourse(Course course);
     void viewRegisteredCourses();
+    boolean hasScheduleConflict(Course course);
+    boolean isRegistered(String courseCode);
 }

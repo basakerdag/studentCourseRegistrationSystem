@@ -64,6 +64,23 @@ public abstract class Student implements Registrable{
     System.out.println("------------------------------------------");
 }
 
+   @Override
+   public boolean hasScheduleConflict(Course course){
+    Registration checker=new Registration(this,course);
+    return checker.isScheduleConflicting(this,course);
+   }
+
+   @Override
+   public boolean isRegistered(String courseCode) {
+    for (Course c : this.getRegisteredCourses()) {
+        if (c.getCourseCode().equalsIgnoreCase(courseCode)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
     public abstract double calculateTuition();
 
     public String getName(){
