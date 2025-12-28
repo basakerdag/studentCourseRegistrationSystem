@@ -151,6 +151,16 @@ public class Registration {
     }
     }
 
+    public static void dropCourse(Student student,Course course){
+        if(student.getRegisteredCourses().remove(course)){
+            course.decrementEnrolledCourse();
+            stCrsRemoveFromCsv(student.getStudentID(),course.getCourseCode());
+            System.out.println("Success:"+ course.getCourseCode()+"has been dropoped.");
+        }else{
+            System.out.println("Error: Your are not registered this course.");
+        }
+    }
+
     
 
 }

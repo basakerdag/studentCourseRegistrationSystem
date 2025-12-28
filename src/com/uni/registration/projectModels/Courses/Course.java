@@ -76,6 +76,11 @@ public abstract class Course{
             courseEnrolledCount++;
         }
     }
+    public void decrementEnrolledCourse(){
+        if(this.courseEnrolledCount>0){
+            this.courseEnrolledCount--;
+        }
+    }
     
     public String getCourseDay(){
         return courseDay;

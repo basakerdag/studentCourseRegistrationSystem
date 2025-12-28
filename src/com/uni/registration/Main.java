@@ -20,6 +20,7 @@ public class Main {
         Registration.loadEnrollments(studentManager,catalog);
         Instructor loggedInInstructor = null; 
         Student loggedInStudent = null; 
+
         while (true) { 
             System.out.println("\n---Student Course Registration System---");
             System.out.println("1. Student Portal");
@@ -63,8 +64,9 @@ public class Main {
                         System.out.println("2.Enroll in a course");
                         System.out.println("3.View My Registered Courses");
                         System.out.println("4. Display Tuition Fee"); 
-                        System.out.println("5. Change Password ");    
-                        System.out.println("6. Logout");
+                        System.out.println("5. Change Password ");  
+                        System.out.println("6. Drop course ");  
+                        System.out.println("7. Logout");
                         int dashboardChoice=input.nextInt();
                         input.nextLine();
                         switch(dashboardChoice){
@@ -72,6 +74,7 @@ public class Main {
                                 catalog.displayCourses();
                                 break;
                             case 2:
+                                System.out.println("---Enroll in a course---");
                                 System.out.println("Enter the course code you want to register for: ");
                                 String registerCourse=input.nextLine();
                                 Course course=catalog.findCourseByCode(registerCourse);
@@ -109,9 +112,26 @@ public class Main {
                                 }
                                 break;
                             case 6:
+                                System.out.println("---Your Registered Courses---");
+                                if(loggedInStudent.getRegisteredCourses().isEmpty()){
+                                    System.out.println("You have no registered courses.");
+                                }else{
+                                    for(Course c:loggedInStudent.getRegisteredCourses()){
+                                        System.out.println("--["+c.getCourseCode()+"]--"+c.getCourseName());
+                                    }
+                                }
+                                System.out.println("Which course do you want to drop?");
+                                String courseDrop=input.nextLine();
+                                Course courseToDrop=catalog.findCourseByCode(courseDrop);
+                                if(courseToDrop!=null){
+                                    Registration.dropCourse(loggedInStudent, courseToDrop);
+                                }else{
+                                    System.out.println("Course not found in your list");
+                                }
+                                 break;
+                            case 7:
                                 testUser=false;
-                                break;
-                            
+                                break;                          
                           }
  
                           }
