@@ -20,6 +20,9 @@ public class Main {
         Registration.loadEnrollments(studentManager,catalog);
         Instructor loggedInInstructor = null; 
         Student loggedInStudent = null; 
+        studentManager.loadFromStudentCsv();
+        studentManager.loadGradesFromCsv();
+        
 
         while (true) { 
             System.out.println("\n---Student Course Registration System---");
@@ -300,40 +303,68 @@ public class Main {
                                     }
                                 }
                                 break;  
-                            case 5: { 
-                                System.out.println("\n---Grade Entry System---");
-                                System.out.print("Enter Student ID: ");
-                                int targetID = input.nextInt();
+                            case 5: {
+                            System.out.println("\n---Grade Entry System---");
+                            System.out.print("Enter Student ID: ");
+                            int targetID = input.nextInt();
+                            input.nextLine(); 
 
-                                Student targetStudent = studentManager.findStudentByID(targetID);
+                            Student targetStudent = studentManager.findStudentByID(targetID);
+                            if (targetStudent != null) {
+                            System.out.println("Student: " + targetStudent.getName() + " " + targetStudent.getSurname());
+                            System.out.print("Enter Course Code to assign grade: ");
+                            String targetCourseCode = input.next();
+                            input.nextLine();
 
-                                if (targetStudent != null) {
-                                System.out.println("Student: " + targetStudent.getName() + " " + targetStudent.getSurname());
-                                System.out.println("Registered Courses: ");
-                                for (Course c : targetStudent.getRegisteredCourses()) {
-                                   System.out.println("- " + c.getCourseCode() + " (" + c.getCourseName() + ")");
+                            Course courseInCatalog = catalog.findCourseByCode(targetCourseCode);
+
+                            if (courseInCatalog == null) {
+                             System.out.println("Error: Course not found in catalog.");
+                            } else if (courseInCatalog.getInstructor() == null ||
+                                courseInCatalog.getInstructor().getInstructorID() != loggedInInstructor.getInstructorID()) {
+                             System.out.println("Error: You can only assign grades to your own courses!");
+                            } else if (targetStudent.isRegistered(targetCourseCode)) {
+                            Double[] existingGrades = targetStudent.getGrades().get(targetCourseCode);
+
+                            if (existingGrades != null && existingGrades[0] != null && existingGrades[1] != null) {
+                                System.out.println("Error: Both Midterm and Final grades are already entered for this course.");
+                            } else {
+                                Double midterm = null;
+                                Double finalExam = null;
+
+                            if (existingGrades != null && existingGrades[0] != null) {
+                                    System.out.println("Notice: Midterm grade was already entered (" + existingGrades[0] + ").");
+                                    midterm = existingGrades[0]; 
+                                } else {
+                                    System.out.print("Enter Midterm Grade (0-100): ");
+                                    String midtermStr = input.nextLine().trim();
+                                    midterm = midtermStr.isEmpty() ? null : Double.parseDouble(midtermStr);
                                 }
 
-                                System.out.print("Enter Course Code to assign grade: ");
-                                String targetCourseCode = input.next();
+                                if (existingGrades != null && existingGrades[1] != null) {
+                                    System.out.println("Notice: Final grade was already entered (" + existingGrades[1] + ").");
+                                    finalExam = existingGrades[1]; 
+                                } else {
+                                    System.out.print("Enter Final Grade (0-100): ");
+                                    String finalStr = input.nextLine().trim();
+                                    finalExam = finalStr.isEmpty() ? null : Double.parseDouble(finalStr);
+                                }
 
-                                if (targetStudent.isRegistered(targetCourseCode)) {
-                               System.out.print("Enter Midterm Grade (0-100): ");
-                               double midterm = input.nextDouble();
-
-                               System.out.print("Enter Final Grade (0-100): ");
-                               double finalExam = input.nextDouble();
-
-                               targetStudent.addGrade(targetCourseCode, midterm, finalExam);
-                               studentManager.saveGradesToCsv(); 
-                               System.out.println("Success: Midterm and Final grades have been saved.");
-                            } else {
+                                if (midterm != null || finalExam != null) {
+                                    targetStudent.addGrade(targetCourseCode, midterm, finalExam);
+                                    studentManager.saveGradesToCsv();
+                                    System.out.println("Success: Grades have been updated and saved.");
+                                } else {
+                                    System.out.println("Information: No grades entered, skipping save.");
+                                }
+                              }
+                           } else {
                               System.out.println("Error: Student is not registered for course " + targetCourseCode);
-                            }
+                           }
                             } else {
-                            System.out.println("Error: No student found with ID " + targetID);
+                              System.out.println("Error: No student found with ID " + targetID);
                             }
-                            break;
+                           break;
                             }
                             case 6:
                                 testInstructor=false;

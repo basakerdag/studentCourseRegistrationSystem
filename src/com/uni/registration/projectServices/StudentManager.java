@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -161,14 +163,20 @@ public class StudentManager {
         }
     }
     Registration.removeAllEnrollmentsForCourse(courseCode);
- }
+    }
 
- public void saveGradesToCsv() {
+     public void saveGradesToCsv() {    
     try (PrintWriter pw = new PrintWriter(new FileWriter(gradesFile, false))) {
         for (Student s : students) {
-            for (Map.Entry<String, Double[]> entry : s.getGrades().entrySet()) {
+            Map<String, Double[]> studentGrades = s.getGrades();
+            
+            for (Map.Entry<String, Double[]> entry : studentGrades.entrySet()) {
                 Double[] notes = entry.getValue(); 
-                pw.println(s.getStudentID() + "," + entry.getKey() + "," + notes[0] + "," + notes[1]);
+
+                String midPart = (notes[0] == null) ? "null" : String.valueOf(notes[0]);
+                String finPart = (notes[1] == null) ? "null" : String.valueOf(notes[1]);
+                
+                pw.println(s.getStudentID() + "," + entry.getKey() + "," + midPart + "," + finPart);
             }
         }
     } catch (IOException e) {
@@ -177,29 +185,33 @@ public class StudentManager {
 }
 
 public void loadGradesFromCsv() {
-    File file = new File(gradesFile);
-    if (!file.exists()) return;
+    try {
+        List<String> lines = Files.readAllLines(Paths.get("src/data/grades.csv"));
+        for (String line : lines) {
+            if (line.trim().isEmpty()) continue;
 
-    try (BufferedReader br = new BufferedReader(new FileReader(gradesFile))) {
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] data = line.split(",");
-            if (data.length < 4) continue;
+            String[] parts = line.split(","); 
+            if (parts.length >= 4) {
+                int studentId = Integer.parseInt(parts[0].trim());
+                String courseCode = parts[1].trim(); 
+                
+                String midStr = parts[2].trim();
+                String finStr = parts[3].trim();
+                Double midterm = midStr.equalsIgnoreCase("null") || midStr.isEmpty() ? null : Double.parseDouble(midStr);
+                Double finalExam = finStr.equalsIgnoreCase("null") || finStr.isEmpty() ? null : Double.parseDouble(finStr);
 
-            int sID = Integer.parseInt(data[0]);
-            String cCode = data[1];
-            double mGrade = Double.parseDouble(data[2]);
-            double fGrade = Double.parseDouble(data[3]);
-
-            Student s = findStudentByID(sID);
-            if (s != null) {
-                s.addGrade(cCode, mGrade, fGrade); 
+                Student s = findStudentByID(studentId);
+                if (s != null) {
+                    s.addGrade(courseCode, midterm, finalExam);
+                }
             }
         }
     } catch (IOException e) {
-        System.err.println("Error loading grades: " + e.getMessage());
+        System.out.println("Grades file not found, starting with empty grades.");
+    } catch (NumberFormatException e) {
+        System.out.println("Error parsing grade data: " + e.getMessage());
     }
-   }
+}
 
 
 }

@@ -3,6 +3,10 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.time.LocalTime;
+import com.uni.registration.projectModels.Courses.Course;
+import com.uni.registration.projectModels.Courses.ElectiveCourse;
+import com.uni.registration.projectModels.Courses.MandatoryCourse;
 import com.uni.registration.projectModels.Students.*;
 import com.uni.registration.projectServices.StudentManager;
 import java.io.IOException;
@@ -84,4 +88,43 @@ public class StudentTest {
             "Login should return null if the student ID is not found in the system.")
       );
     }
+
+    @Test
+    void testGpaCalculationWithMissingFinal() {
+    String courseCode = "CENG101";  
+    Course mockCourse = new MandatoryCourse("Java", courseCode, 5, null, 30, 0, "Monday", null, null);
+
+    testStudent.registerCourse(mockCourse); 
+    
+    testStudent.addGrade(courseCode, 80.0, null);
+    assertEquals(0.0, testStudent.calculateGPA(), "GPA should be 0.0 for courses with a missing final exam grade.");
+}
+
+   @Test
+    void testGradePersistenceInMemory() {
+        String courseCode = "MATH101";        
+        Course mathCourse = new MandatoryCourse("Math", courseCode, 5, null, 30, 0, "Monday", null, null);
+        testStudent.registerCourse(mathCourse); 
+        
+        testStudent.addGrade(courseCode, 75.0, null);
+        
+        Double[] grades = testStudent.getGrades().get(courseCode);
+        
+        assertAll("Grade Data Integrity Validations",
+            () -> assertNotNull(grades, "Grade array should not be null."),
+            () -> assertEquals(75.0, grades[0], "Midterm grade must be recorded correctly."),
+            () -> assertNull(grades[1], "Final grade should remain null if not entered.")
+        );;
+    }
+
+    @Test
+    void testRegistrationValidationBeforeGrading() {
+        String unregisteredCourse = "HIST101";
+        
+        testStudent.addGrade(unregisteredCourse, 50.0, 50.0);
+        
+        assertNull(testStudent.getGrades().get(unregisteredCourse), 
+            "Grades should not be assigned to a course the student is not registered for.");
+    }
+
 }

@@ -199,32 +199,40 @@ public abstract class Student implements Registrable{
     }
 
     
-    public void addGrade(String courseCode, double midterm, double finalExam) {
+   public void addGrade(String courseCode, Double midterm, Double finalExam) {
     if (isRegistered(courseCode)) {
-        grades.put(courseCode, new Double[]{midterm, finalExam});
-        System.out.println("Grades recorded for: " + courseCode);
+        Double[] existing = grades.getOrDefault(courseCode, new Double[2]);
+        if (midterm != null) existing[0] = midterm;
+        if (finalExam != null) existing[1] = finalExam;
+
+        grades.put(courseCode, existing);
+        System.out.println("Grades recorded/updated for: " + courseCode);
     } else {
         System.out.println("Error: Student is not registered for " + courseCode);
     }
-  }
+}
 
     public double calculateGPA() {
-    double totalWeightedPoints = 0;
+    double totalPoints = 0;
     int totalCredits = 0;
 
     for (Course course : registeredCourse) {
-        String code = course.getCourseCode();
-        if (grades.containsKey(code)) {
-            Double[] notes = grades.get(code); 
-          
-            double rawScore = (notes[0] * 0.4) + (notes[1] * 0.6);
-            double gradeIn4Scale = (rawScore / 100.0) * 4.0;
-
-            totalWeightedPoints += (gradeIn4Scale * course.getCourseCredit());
-            totalCredits += course.getCourseCredit();
+        Double[] notes = grades.get(course.getCourseCode());
+        if (notes != null && notes.length >= 2) {
+            if (notes[0] != null && notes[1] != null) {
+                double average = (notes[0] * 0.4) + (notes[1] * 0.6);
+                double gradePoint = (average / 100) * 4.0;
+                
+                totalPoints += gradePoint * course.getCourseCredit();
+                totalCredits += course.getCourseCredit();
+            }
         }
     }
-    return (totalCredits == 0) ? 0.0 : totalWeightedPoints / totalCredits;
+    if (totalCredits == 0) {
+        return 0.0;
+    }
+
+    return totalPoints / totalCredits;
 }
 
 }
