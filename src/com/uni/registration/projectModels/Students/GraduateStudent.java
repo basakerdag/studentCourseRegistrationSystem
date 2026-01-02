@@ -1,9 +1,10 @@
+package com.uni.registration.projectModels.Students;
+
+
 /**
    *GraduateStudent class representing a master or doctoral level student.
    *Inherits from Student and implements tuition calculation based on course count.
  */
-
-package com.uni.registration.projectModels.Students;
 
 public class GraduateStudent extends Student{
     private static final double fixedTuition=5000.0;

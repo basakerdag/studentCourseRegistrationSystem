@@ -3,7 +3,6 @@ import com.uni.registration.projectModels.Courses.*;
 import com.uni.registration.projectModels.Students.*;
 import com.uni.registration.projectServices.CourseCatalog;
 import com.uni.registration.projectServices.StudentManager;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -13,11 +12,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages the course registration process, including schedule validations,capacity checks, and persistence of enrollment data in CSV files.
+ */
 public class Registration {
     private Student student;
     private Course course;
     private LocalDate registrationDate;
-
+    
+    /**
+     * Path to the CSV file where enrollment records are stored.
+     */
     public static final String enrollmentCsv = "src/data/enrollments.csv";
 
 
@@ -36,7 +41,13 @@ public class Registration {
     public LocalDate getRegistrationDate(){
         return registrationDate;
     }
-
+    
+    /**
+     * Checks for time overlaps between a new course and the student's existing schedule.
+     * @param student The student to check.
+     * @param newCourse The potential new course.
+     * @return true if a time conflict exists, false otherwise.
+     */
     public boolean isScheduleConflicting(Student student,Course newCourse){
         for(Course registeredCourse:student.getRegisteredCourses()){
             if(registeredCourse.getCourseDay().equalsIgnoreCase(newCourse.getCourseDay())){
@@ -49,9 +60,13 @@ public class Registration {
         }
         return false;
     }
-
-
-
+    
+    /**
+     * Handles the full registration logic, verifying capacity, conflicts, and duplicates.
+     * Saves the successful registration to the CSV database.
+     * @param student The student attempting to register.
+     * @param course The course target for registration.
+     */
     public void registerCourse(Student student, Course course) {
         boolean alreadyRegistered=false;
         for(Course registeredCourse:student.getRegisteredCourses()){
@@ -84,10 +99,11 @@ public class Registration {
     this.course = course;
     stCrsSaveToCsv();
     System.out.println("Registration successful for " + course.getCourseName() + ".");
-}
-    
-    
+   } 
 
+   /**
+     * Saves a successful registration record (Student ID, Course Code, Date) to CSV.
+     */
     public void stCrsSaveToCsv(){
         try (PrintWriter pw = new PrintWriter(new FileWriter(enrollmentCsv, true))) {
             pw.println(student.getStudentID() + "," + course.getCourseCode() + "," + registrationDate);
@@ -95,9 +111,12 @@ public class Registration {
             System.err.println("Error writing to enrollments: " + e.getMessage());
         }
     }
-
-
     
+    /**
+     * Removes a specific enrollment record from the CSV file.
+     * @param studentID ID of the student.
+     * @param courseCode Code of the course to be removed.
+     */
     public static void stCrsRemoveFromCsv(int studentID,String courseCode){
     List<String> remainingEnrollments = new ArrayList<>();
 
@@ -122,8 +141,13 @@ public class Registration {
     } catch (IOException e) {
         System.err.println("Error updating enrollments file: " + e.getMessage());
     }      
-    }
+  }
 
+    /**
+     * Synchronizes the system state by loading all enrollment data from the CSV file.
+     * @param studentManager Service to find student objects.
+     * @param courseCatalog Service to find course objects.
+     */
     public static void loadEnrollments(StudentManager studentManager,CourseCatalog courseCatalog){
     java.io.File file = new java.io.File(enrollmentCsv);
     if (!file.exists()) return;
@@ -150,7 +174,12 @@ public class Registration {
         System.err.println("Error while recovering enrollments: " + e.getMessage());
     }
     }
-
+    
+    /**
+     * Processes a course withdrawal for a student and updates the persistent storage.
+     * @param student The student dropping the course.
+     * @param course The course to be dropped.
+     */
     public static void dropCourse(Student student,Course course){
         if(student.getRegisteredCourses().remove(course)){
             course.decrementEnrolledCourse();
@@ -160,7 +189,12 @@ public class Registration {
             System.out.println("Error: Your are not registered this course.");
         }
     }
-
+    
+    /**
+     * Cleans up all enrollment records associated with a specific course code.
+     * Used when a course is completely removed from the catalog.
+     * @param courseCode The code of the course to purge.
+     */
     public static void removeAllEnrollmentsForCourse(String courseCode) {
     List<String> remainingEnrollments = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(enrollmentCsv))) {

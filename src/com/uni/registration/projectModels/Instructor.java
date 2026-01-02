@@ -1,5 +1,10 @@
 package com.uni.registration.projectModels;
 
+/**
+ * Represents an instructor in the registration system.
+ * Manages personal information, departmental affiliation, and security credentials.
+ */
+
 public class Instructor{
     private String instructorName;
     private String instructorSurname;
@@ -50,11 +55,20 @@ public class Instructor{
         this.password=password;
     }
 
+    /**
+     * @return A formatted string with instructor name and ID.
+     */
     @Override
     public String toString() {
     return "Instructor: " + instructorName + " (ID: " + instructorID + ")";
      }
 
+     /**
+     * Updates the instructor's password after verifying the current one.
+     * @param currentInstructorPassword The current password to verify.
+     * @param newInstructorPassword The new password to be set.
+     * @return true if the password was successfully updated, false otherwise.
+     */
     public boolean changeInstructorPassword(String currentInstructorPassword, String newInstructorPassword){
         if(!this.password.equals(currentInstructorPassword)){
             System.out.println("Current password is incorrect.");

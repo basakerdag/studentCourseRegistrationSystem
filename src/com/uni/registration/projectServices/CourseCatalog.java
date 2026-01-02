@@ -9,6 +9,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class that manages the collection of all available courses.
+ * Handles loading from and saving to the courses CSV database.
+ */
 public class CourseCatalog {
     private List<Course> allCourses;
     private final String coursesPath = "src/data/courses.csv";
@@ -20,6 +24,10 @@ public class CourseCatalog {
         loadCoursesFromCSV();
     }
 
+    /**
+     * Reads course data from CSV and populates the catalog list.
+     * Differentiates between Mandatory and Elective course types during instantiation.
+     */
     private void loadCoursesFromCSV() {
         File file = new File(coursesPath);
         if (!file.exists()) return;
@@ -57,17 +65,25 @@ public class CourseCatalog {
             System.err.println("Error reading file: " + e.getMessage());
         }
     }
-
- public void addCourse(Course course) {
+    
+    /**
+     * Adds a new course to the catalog if the course code is unique.
+     * Automatically triggers a CSV sync upon successful addition.
+     * @param course The course object to add.
+     */
+     public void addCourse(Course course) {
     if (findCourseByCode(course.getCourseCode()) != null) {
         System.out.println("Error: A course with this code " + course.getCourseCode() + " already exists.");
     } else {
         allCourses.add(course);
         saveCoursesToCsv();
     }
-}
+  } 
 
-public void saveCoursesToCsv() {
+    /**
+     * Overwrites the courses CSV file with the current state of the course list.
+     */
+    public void saveCoursesToCsv() {
     try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, false))) {
         for (Course c : allCourses) {
             Instructor inst = c.getInstructor();
@@ -91,8 +107,11 @@ public void saveCoursesToCsv() {
     } catch (IOException e) {
         System.err.println("Error: Could not save courses - " + e.getMessage());
     }
-}
+  }
 
+    /**
+     * Displays all courses currently available in the catalog to the console.
+     */
     public void displayCourses() {
     if (allCourses.isEmpty()) {
         System.out.println("No courses available in the catalog.");
@@ -108,6 +127,11 @@ public void saveCoursesToCsv() {
         return allCourses;
     }
 
+    /**
+     * Searches for a course in the catalog using its unique course code.
+     * @param code The code to search for (case-insensitive).
+     * @return The found {@link Course} object, or null if no match exists.
+     */
     public Course findCourseByCode(String code) {
         for (Course c : allCourses) {
             if (c.getCourseCode().equalsIgnoreCase(code)) {
@@ -116,7 +140,11 @@ public void saveCoursesToCsv() {
         }
         return null;
     }
-
+    
+    /**
+     * Removes a course from the catalog and updates the CSV file.
+     * @param course The course to be removed.
+     */
     public void removeCourseFromCatalog(Course course){
         if(allCourses.remove(course)){
             saveCoursesToCsv();

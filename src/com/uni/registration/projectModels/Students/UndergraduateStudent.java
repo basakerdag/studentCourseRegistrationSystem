@@ -1,10 +1,10 @@
-/**
-   *UndergraduateStudent class representing a bachelor level student.
-   *Tuition is determined by the total credits of their registered courses.   
- */
-
 package com.uni.registration.projectModels.Students;
 import com.uni.registration.projectModels.Courses.*;
+
+/**
+   *UndergraduateStudent class representing a bachelor level student.
+   *Tuition is calculated based on the total credits of registered courses.
+ */
 
 public class UndergraduateStudent extends Student{
     private static final double pricePerCredit = 300.0;

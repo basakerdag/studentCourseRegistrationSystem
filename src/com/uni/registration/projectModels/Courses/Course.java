@@ -2,6 +2,11 @@ package com.uni.registration.projectModels.Courses;
 import java.time.LocalTime;
 import com.uni.registration.projectModels.Instructor;
 
+/**
+ * Abstract class representing a generic course in the registration system.
+ * It serves as a base class for different types of courses such as Mandatory and Elective.
+ */
+
 public abstract class Course{
     private String courseName;
     private String courseCode;
@@ -60,6 +65,11 @@ public abstract class Course{
     public int getCourseCapacity(){
         return courseCapacity;
     }
+
+    /**
+    * The new capacity cannot be less than the current number of enrolled students.
+    * @param courseCapacity The new capacity to be set.
+    */
     public void setCourseCapacity(int courseCapacity){
         if(courseCapacity>=this.courseEnrolledCount){
            this.courseCapacity=courseCapacity;
@@ -71,11 +81,19 @@ public abstract class Course{
     public int getCourseEnrolledCount(){
         return courseEnrolledCount;
     }
+
+    /**
+     * Increments the enrolled student count if the course has not reached its capacity.
+    */
     public void incrementEnrolledCourse(){
         if (courseEnrolledCount<courseCapacity){
             courseEnrolledCount++;
         }
     }
+
+    /**
+     *Decrements the enrolled student count, ensuring it does not drop below zero.
+    */
     public void decrementEnrolledCourse(){
         if(this.courseEnrolledCount>0){
             this.courseEnrolledCount--;
@@ -99,6 +117,11 @@ public abstract class Course{
     public LocalTime getCourseEndHour(){
         return courseEndHour;
     }
+
+    /**
+    * Sets the course end hour and validates that it occurs after the start hour.
+    * @param courseEndHour The ending time to be validated and set.
+    */
     public void setCourseEndHour(LocalTime courseEndHour){
         if(this.courseStartHour!=null && courseEndHour.isBefore(this.courseEndHour)){
             System.out.println("Course end hour cannot be before course start hour");
@@ -107,7 +130,11 @@ public abstract class Course{
         }
     }
 
-
+    /**
+     * Compares this course with another object for equality based on the course code.
+     * @param o The object to compare with.
+     * @return true if the course codes are identical, false otherwise.
+     */
 
      @Override
     public boolean equals(Object o) {
