@@ -165,6 +165,12 @@ public class StudentManager {
     Registration.removeAllEnrollmentsForCourse(courseCode);
     }
 
+    /**
+     * Synchronizes all student grade records from the application memory to the CSV file.
+     ** It overwrites the existing file, formatting each entry as: 
+     * {@code StudentID,CourseCode,Midterm,Final}.
+     * Null values are stored as the string "null" to prevent data loss.
+    */
      public void saveGradesToCsv() {    
     try (PrintWriter pw = new PrintWriter(new FileWriter(gradesFile, false))) {
         for (Student s : students) {
@@ -182,9 +188,14 @@ public class StudentManager {
     } catch (IOException e) {
         System.err.println("Error saving grades: " + e.getMessage());
     }
-}
-
-public void loadGradesFromCsv() {
+   }
+    
+   /**
+    * Loads student grades from CSV and populates student objects in memory.
+    * Handles "null" strings, empty fields, and maps grades to students by ID.
+    * Logs errors for missing files or invalid data formats.
+    */
+   public void loadGradesFromCsv() { 
     try {
         List<String> lines = Files.readAllLines(Paths.get("src/data/grades.csv"));
         for (String line : lines) {

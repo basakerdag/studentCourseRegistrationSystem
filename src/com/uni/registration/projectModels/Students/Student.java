@@ -197,8 +197,14 @@ public abstract class Student implements Registrable{
         System.out.println("Password changed succesfully.");
         return true;
     }
-
     
+    /**
+     * Assigns or updates grades for a course if the student is registered.
+     * Supports partial updates; provided non-null grades overwrite existing ones.
+     * @param courseCode The unique course identifier.
+     * @param midterm Midterm score or null to keep unchanged.
+     * @param finalExam Final score or null to keep unchanged.
+    */ 
    public void addGrade(String courseCode, Double midterm, Double finalExam) {
     if (isRegistered(courseCode)) {
         Double[] existing = grades.getOrDefault(courseCode, new Double[2]);
@@ -210,8 +216,12 @@ public abstract class Student implements Registrable{
     } else {
         System.out.println("Error: Student is not registered for " + courseCode);
     }
-}
-
+  }
+    /**
+    * Calculates the weighted GPA based on completed courses.
+    * Only includes courses where both midterm (40%) and final (60%) grades are entered.
+    * @return The calculated GPA (0.0 to 4.0), or 0.0 if no courses are completed.
+    */
     public double calculateGPA() {
     double totalPoints = 0;
     int totalCredits = 0;
