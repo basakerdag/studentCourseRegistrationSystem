@@ -4,8 +4,6 @@
  */
 
 package com.uni.registration.projectModels.Students;
-import com.uni.registration.projectModels.Courses.*;
-
 
 public class GraduateStudent extends Student{
     private static final double fixedTuition=5000.0;

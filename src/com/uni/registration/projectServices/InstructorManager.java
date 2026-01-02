@@ -57,6 +57,10 @@ public class InstructorManager {
     }
 
     public void addInstructor(Instructor instructor) {
+        if (findInstructorByID(instructor.getInstructorID()) != null) {
+        System.out.println("Error: Instructor with ID " + instructor.getInstructorID() + " already exists! Registration cancelled.");
+        return;
+    }
         instructors.add(instructor); 
         try (PrintWriter pw = new PrintWriter(new FileWriter(instructorFile, true))) {
             String csvLine = String.format("%s,%s,%s,%s,%s",

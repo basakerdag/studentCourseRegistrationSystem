@@ -1,10 +1,8 @@
 package com.uni.registration;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Scanner;
 import com.uni.registration.projectServices.CourseCatalog;
 import com.uni.registration.projectServices.InstructorManager;
-import com.uni.registration.projectServices.RegistrationManager;
 import com.uni.registration.projectServices.StudentManager;
 import com.uni.registration.projectModels.Courses.*;
 import com.uni.registration.projectModels.Students.*;
@@ -81,15 +79,10 @@ public class Main {
                                 if(selectedCourse==null){
                                     System.out.println("Error: Course not found in the catalog.");
                                 }else{
-                                    if(loggedInStudent.hasScheduleConflict(selectedCourse)){
-                                        System.out.println("Warning: Schedule conflict! You have another course at this time.");
-                                    }else if(loggedInStudent.isRegistered(selectedCourse.getCourseCode())){
-                                        System.out.println("Warning: You are already registered for this course.");                            
-                                    }else{
-                                        loggedInStudent.registerCourse(selectedCourse);
-                                    }
+                                    Registration registrationService=new Registration(loggedInStudent, selectedCourse);
+                                    registrationService.registerCourse(loggedInStudent, selectedCourse);
+                                    catalog.saveCoursesToCsv();
                                 }
-                               
                                 break;
                             case 3:
                                 loggedInStudent.viewRegisteredCourses();

@@ -4,9 +4,7 @@ import com.uni.registration.projectModels.*;
 import com.uni.registration.projectModels.Courses.Course;
 import com.uni.registration.projectModels.Courses.ElectiveCourse;
 import com.uni.registration.projectModels.Courses.MandatoryCourse;
-import com.uni.registration.projectServices.InstructorManager;
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,18 +30,20 @@ public class CourseCatalog {
                 if (line.trim().isEmpty()) continue;
 
             String[] data = line.split(",");
-            if (data.length < 7) continue;
+            if (data.length < 11) continue;
 
             String courseName = data[0];
             String courseCode = data[1];
             int courseCredit = Integer.parseInt(data[2]);
             int instructorID = Integer.parseInt(data[3]);
-            String courseType = data[4];
-            int courseCapacity=Integer.parseInt(data[5]);
-            int courseEnrolledCount=Integer.parseInt(data[6]);
-            String courseDay=data[7];
-            LocalTime courseStartHour=LocalTime.parse(data[8]);
-            LocalTime courseEndHour=LocalTime.parse(data[9]);
+            String instructorName=data[4];
+            String  instructorSurname=data[5];
+            String courseType = data[6];
+            int courseCapacity=Integer.parseInt(data[7]);
+            int courseEnrolledCount=Integer.parseInt(data[8]);
+            String courseDay=data[9];
+            LocalTime courseStartHour=LocalTime.parse(data[10]);
+            LocalTime courseEndHour=LocalTime.parse(data[11]);
             Instructor inst = instructorManager.findInstructorByID(instructorID);
             Course course;
             if (courseType.equalsIgnoreCase("Mandatory")) {
@@ -58,39 +58,27 @@ public class CourseCatalog {
         }
     }
 
-    public void addCourse(Course course) {
-        if(findCourseByCode(course.getCourseCode())!=null){
-            System.out.println("Error:A course with this code"+ course.getCourseCode()+"already exists.");
-        }else{
-                    allCourses.add(course);
-        
-        try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, true))) {
-            String csvLine = String.format("%s,%s,%d,%s,%s,%d,%d",
-                course.getCourseName(),
-                course.getCourseCode(),
-                course.getCourseCredit(),
-                course.getInstructor().getInstructorID(),
-                course.getCourseType(),
-                course.getCourseCapacity(),
-                course.getCourseEnrolledCount()
-            );
-            pw.println(csvLine);
-        } catch (IOException e) {
-            System.err.println("Error saving to file: " + e.getMessage());
-        }
-
-        }
+ public void addCourse(Course course) {
+    if (findCourseByCode(course.getCourseCode()) != null) {
+        System.out.println("Error: A course with this code " + course.getCourseCode() + " already exists.");
+    } else {
+        allCourses.add(course);
+        saveCoursesToCsv();
     }
+}
 
-    public void saveCoursesToCsv(){
-        try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, false))) {
+public void saveCoursesToCsv() {
+    try (PrintWriter pw = new PrintWriter(new FileWriter(coursesPath, false))) {
         for (Course c : allCourses) {
-            String csvLine = String.format("%s,%s,%d,%d,%s,%d,%d,%s,%s,%s",
+            Instructor inst = c.getInstructor();
+            String csvLine = String.format("%s,%s,%d,%d,%s,%s,%s,%d,%d,%s,%s,%s",
                 c.getCourseName(),
                 c.getCourseCode(),
                 c.getCourseCredit(),
-                c.getInstructor().getInstructorID(),
-                (c instanceof MandatoryCourse ? "Mandatory" : "Elective"),
+                inst.getInstructorID(),
+                inst.getInstructorName(),       
+                inst.getInstructorSurname(),       
+                c.getCourseType(),
                 c.getCourseCapacity(),
                 c.getCourseEnrolledCount(),
                 c.getCourseDay(),
@@ -101,9 +89,9 @@ public class CourseCatalog {
         }
         System.out.println("Courses database successfully synced.");
     } catch (IOException e) {
-        System.err.println("Error: Could not update courses file: " + e.getMessage());
+        System.err.println("Error: Could not save courses - " + e.getMessage());
     }
-    }
+}
 
     public void displayCourses() {
     if (allCourses.isEmpty()) {

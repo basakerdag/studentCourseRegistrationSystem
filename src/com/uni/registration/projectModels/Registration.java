@@ -52,28 +52,39 @@ public class Registration {
 
 
 
-
-
-    public void registerCourse(Student student,Course course){
-        if(course.getCourseEnrolledCount()>=course.getCourseCapacity()){
-            System.out.println("Warning!"+course.getCourseName()+"is full.");
+    public void registerCourse(Student student, Course course) {
+        boolean alreadyRegistered=false;
+        for(Course registeredCourse:student.getRegisteredCourses()){
+            if(registeredCourse.getCourseCode().equalsIgnoreCase(course.getCourseCode())){
+                alreadyRegistered=true;
+                break;
+            }
+        }
+        if(alreadyRegistered){
+            System.out.println("Warning: You are already registered for " + course.getCourseName() + ".");
             return;
         }
-        if(isScheduleConflicting(student, course)){
-            System.out.println("Warning: Schedule conflict! You already have another course on "+ course.getCourseDay() +" beetween "+
-            course.getCourseStartHour()+" and "+course.getCourseEndHour()+".");
-            return;
-        }
-        
-        
-            student.getRegisteredCourses().add(course);
-            course.incrementEnrolledCourse();
-            this.student=student;
-            this.course=course;
-            stCrsSaveToCsv();
-            System.out.println("Registration successful.");
-        
+
+
+    if (course.getCourseEnrolledCount() >= course.getCourseCapacity()) {
+        System.out.println("Warning! " + course.getCourseName() + " is full.");
+        return;
     }
+
+    if (isScheduleConflicting(student, course)) {
+        System.out.println("Warning: Schedule conflict! You already have another course on " + 
+            course.getCourseDay() + " between " + course.getCourseStartHour() + 
+            " and " + course.getCourseEndHour() + ".");
+        return;
+    }
+    
+    student.getRegisteredCourses().add(course);
+    course.incrementEnrolledCourse();
+    this.student = student;
+    this.course = course;
+    stCrsSaveToCsv();
+    System.out.println("Registration successful for " + course.getCourseName() + ".");
+}
     
     
 

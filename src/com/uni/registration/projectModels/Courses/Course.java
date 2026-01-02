@@ -19,7 +19,7 @@ public abstract class Course{
         this.courseCode=courseCode;
         this.courseCredit=courseCredit;
         this.instructor=instructor;
-        this.courseCapacity=courseCapacity;
+        this.courseCapacity=courseCapacity; 
         this.courseEnrolledCount=0;
         this.courseDay=courseDay;
         this.courseStartHour=courseStartHour;

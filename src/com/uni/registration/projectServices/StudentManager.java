@@ -70,6 +70,10 @@ public class StudentManager {
     }
 } 
     public void addStudent(Student student) {
+        if (findStudentByID(student.getStudentID()) != null) {
+        System.out.println("Error: Student with ID " + student.getStudentID() + " already exists! Registration cancelled.");
+        return; 
+    }
         students.add(student);
         try(PrintWriter pw=new PrintWriter(new FileWriter(studentsFile,true))){
             String csvLine=String.format("%s,%s,%d,%s,%d,%s,%s",
