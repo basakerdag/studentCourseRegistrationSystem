@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.io.File;
 import com.uni.registration.projectModels.Registration;
 import com.uni.registration.projectModels.Courses.Course;
 import com.uni.registration.projectModels.Students.*;
@@ -17,6 +19,7 @@ import com.uni.registration.projectModels.Students.*;
 public class StudentManager {
     private List<Student> students;
     private final String studentsFile = "src/data/students.csv";
+    private final String gradesFile = "src/data/grades.csv";
 
     public StudentManager() {
         this.students = new ArrayList<>();
@@ -159,6 +162,44 @@ public class StudentManager {
     }
     Registration.removeAllEnrollmentsForCourse(courseCode);
  }
+
+ public void saveGradesToCsv() {
+    try (PrintWriter pw = new PrintWriter(new FileWriter(gradesFile, false))) {
+        for (Student s : students) {
+            for (Map.Entry<String, Double[]> entry : s.getGrades().entrySet()) {
+                Double[] notes = entry.getValue(); 
+                pw.println(s.getStudentID() + "," + entry.getKey() + "," + notes[0] + "," + notes[1]);
+            }
+        }
+    } catch (IOException e) {
+        System.err.println("Error saving grades: " + e.getMessage());
+    }
+}
+
+public void loadGradesFromCsv() {
+    File file = new File(gradesFile);
+    if (!file.exists()) return;
+
+    try (BufferedReader br = new BufferedReader(new FileReader(gradesFile))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split(",");
+            if (data.length < 4) continue;
+
+            int sID = Integer.parseInt(data[0]);
+            String cCode = data[1];
+            double mGrade = Double.parseDouble(data[2]);
+            double fGrade = Double.parseDouble(data[3]);
+
+            Student s = findStudentByID(sID);
+            if (s != null) {
+                s.addGrade(cCode, mGrade, fGrade); 
+            }
+        }
+    } catch (IOException e) {
+        System.err.println("Error loading grades: " + e.getMessage());
+    }
+   }
 
 
 }

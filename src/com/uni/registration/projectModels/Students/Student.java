@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import com.uni.registration.projectModels.Registrable;
 import com.uni.registration.projectModels.Registration;
 import com.uni.registration.projectModels.Courses.Course;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract base class representing a student in the university system.
@@ -19,6 +21,7 @@ public abstract class Student implements Registrable{
     private int year;
     private String password;
     protected ArrayList<Course> registeredCourse;
+    protected Map<String, Double[]> grades;
 
 
     public Student(String name,String surname,int studentID,String department,int year,String password){
@@ -29,6 +32,7 @@ public abstract class Student implements Registrable{
         this.year=year;
         this.password=password;
         this.registeredCourse=new ArrayList<>();
+        this.grades = new HashMap<>();
     }
 
     /**
@@ -169,6 +173,10 @@ public abstract class Student implements Registrable{
         return registeredCourse.contains(course);
     }
 
+    public Map<String, Double[]> getGrades() {
+    return grades;
+    } 
+
     /**
      * Updates the student's password after validating the current one.
      * @param currentStudentPassword The existing password.
@@ -189,8 +197,36 @@ public abstract class Student implements Registrable{
         System.out.println("Password changed succesfully.");
         return true;
     }
- 
+
+    
+    public void addGrade(String courseCode, double midterm, double finalExam) {
+    if (isRegistered(courseCode)) {
+        grades.put(courseCode, new Double[]{midterm, finalExam});
+        System.out.println("Grades recorded for: " + courseCode);
+    } else {
+        System.out.println("Error: Student is not registered for " + courseCode);
+    }
+  }
+
+    public double calculateGPA() {
+    double totalWeightedPoints = 0;
+    int totalCredits = 0;
+
+    for (Course course : registeredCourse) {
+        String code = course.getCourseCode();
+        if (grades.containsKey(code)) {
+            Double[] notes = grades.get(code); 
+          
+            double rawScore = (notes[0] * 0.4) + (notes[1] * 0.6);
+            double gradeIn4Scale = (rawScore / 100.0) * 4.0;
+
+            totalWeightedPoints += (gradeIn4Scale * course.getCourseCredit());
+            totalCredits += course.getCourseCredit();
+        }
+    }
+    return (totalCredits == 0) ? 0.0 : totalWeightedPoints / totalCredits;
+}
 
 }
-  
+ 
 

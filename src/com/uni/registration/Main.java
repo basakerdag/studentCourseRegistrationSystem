@@ -1,5 +1,7 @@
 package com.uni.registration;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import com.uni.registration.projectServices.CourseCatalog;
 import com.uni.registration.projectServices.InstructorManager;
@@ -63,8 +65,9 @@ public class Main {
                         System.out.println("3.View My Registered Courses");
                         System.out.println("4. Display Tuition Fee"); 
                         System.out.println("5. Change Password ");  
-                        System.out.println("6. Drop course ");  
-                        System.out.println("7. Logout");
+                        System.out.println("6. Drop course "); 
+                        System.out.println("7. Display my notes"); 
+                        System.out.println("8. Logout");
                         int dashboardChoice=input.nextInt();
                         input.nextLine();
                         switch(dashboardChoice){
@@ -126,11 +129,31 @@ public class Main {
                                 }
                                  break;
                             case 7:
-                                testUser=false;
-                                break;                          
-                          }
- 
-                          }
+                                System.out.println("---Grade Report---");
+                                Map<String, Double[]> myGrades = loggedInStudent.getGrades();
+                                for (Course c : loggedInStudent.getRegisteredCourses()){
+                                    Double[] notes = myGrades.get(c.getCourseCode());
+                                    if (notes != null){
+                                        System.out.printf("%-10s %-10.1f %-10.1f\n", 
+                                          c.getCourseCode(), notes[0], notes[1]);
+                                    }else {
+                                        System.out.printf("%-10s %-10s %-10s\n", 
+                                         c.getCourseCode(), "N/A", "N/A");
+                                  }
+                                }
+                                 System.out.println("---------------------------------");
+                                System.out.printf("GPA: %.2f / 4.00\n", loggedInStudent.calculateGPA());
+                                System.out.println("---------------------------------\n");
+                                 break;                   
+                          
+                            case 8:
+                                testUser = false;
+                                break;
+                            default:
+                                System.out.println("Invalid choice.");
+                                break;
+                            }
+                        }
                         }else{
                             System.out.println("System cannot find the user.");
                         }
@@ -198,7 +221,8 @@ public class Main {
                         System.out.println("2. Add new course");
                         System.out.println("3. Change Password");
                         System.out.println("4. Drop courses ");
-                        System.out.println("5. Logout");
+                        System.out.println("5. Grade Entry System ");
+                        System.out.println("6. Logout");
                         System.out.println("Please select an option.");
                         int instructorOp=input.nextInt();
                         input.nextLine();
@@ -275,8 +299,43 @@ public class Main {
                                       System.out.println("Error: Course not found or you are not authorized to delete it.");
                                     }
                                 }
-                                break;                             
-                            case 5:
+                                break;  
+                            case 5: { 
+                                System.out.println("\n---Grade Entry System---");
+                                System.out.print("Enter Student ID: ");
+                                int targetID = input.nextInt();
+
+                                Student targetStudent = studentManager.findStudentByID(targetID);
+
+                                if (targetStudent != null) {
+                                System.out.println("Student: " + targetStudent.getName() + " " + targetStudent.getSurname());
+                                System.out.println("Registered Courses: ");
+                                for (Course c : targetStudent.getRegisteredCourses()) {
+                                   System.out.println("- " + c.getCourseCode() + " (" + c.getCourseName() + ")");
+                                }
+
+                                System.out.print("Enter Course Code to assign grade: ");
+                                String targetCourseCode = input.next();
+
+                                if (targetStudent.isRegistered(targetCourseCode)) {
+                               System.out.print("Enter Midterm Grade (0-100): ");
+                               double midterm = input.nextDouble();
+
+                               System.out.print("Enter Final Grade (0-100): ");
+                               double finalExam = input.nextDouble();
+
+                               targetStudent.addGrade(targetCourseCode, midterm, finalExam);
+                               studentManager.saveGradesToCsv(); 
+                               System.out.println("Success: Midterm and Final grades have been saved.");
+                            } else {
+                              System.out.println("Error: Student is not registered for course " + targetCourseCode);
+                            }
+                            } else {
+                            System.out.println("Error: No student found with ID " + targetID);
+                            }
+                            break;
+                            }
+                            case 6:
                                 testInstructor=false;
                           }
                          }
