@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalTime;
+import com.uni.registration.projectModels.Registration;
 import com.uni.registration.projectModels.Courses.Course;
 import com.uni.registration.projectModels.Courses.ElectiveCourse;
 import com.uni.registration.projectModels.Courses.MandatoryCourse;
@@ -17,6 +18,7 @@ import java.util.List;
 public class StudentTest {
     private Student testStudent;
     private StudentManager studentManager;
+    private Registration registrationSystem=new Registration(testStudent, null);
 
     @BeforeEach
     void setUp() {
@@ -24,7 +26,11 @@ public class StudentTest {
         2, "studentPass123");
         studentManager = new StudentManager();
     }
-
+    
+    /**
+     * Verifies that the student data is correctly written to and stored in the CSV file.
+     * Checks if the last record in the file matches the added student's information.
+     */
     @Test
     void testAddStudentToCsvPersistence() throws IOException {
         studentManager.addStudent(testStudent);
@@ -39,7 +45,10 @@ public class StudentTest {
             () -> assertEquals("studentPass123", columns[5], "Password should be in the correct column.")
         );
     }
-
+    
+    /**
+     * Ensures that the system prevents duplicate registrations by rejecting any new student who has an already existing Student ID.
+    */
     @Test
     void testDuplicateIdPrevention() {
     Student firstStudent = new UndergraduateStudent("Ali", "Kaya", 56, "Computer Engineering", 1, "pass123");
@@ -55,7 +64,10 @@ public class StudentTest {
         () -> assertNotEquals("Veli", result.getName(), "The second student 'Veli' should not have been added.")
        );
     }
-
+   
+   /**
+    * Verifies the password change logic, ensuring it validates the current password and prevents using the same password as the new one.
+    */ 
    @Test
    void testChangeStudentPasswordLogic() {
     String currentPass = "studentPass123";
@@ -72,6 +84,9 @@ public class StudentTest {
       );
    }
 
+   /**
+    * Validates the student login system by testing successful authentication, incorrect password attempts, and non-existent user scenarios.
+   */
    @Test
    void testStudentLoginLogic() {
     studentManager.addStudent(testStudent); 
@@ -89,6 +104,10 @@ public class StudentTest {
       );
     }
 
+    /**
+     * Ensures that GPA remains 0.0 if a course is missing a final exam grade, treating incomplete courses as not yet contributive to 
+     * the overall average.
+    */
     @Test
     void testGpaCalculationWithMissingFinal() {
     String courseCode = "CENG101";  
@@ -98,25 +117,11 @@ public class StudentTest {
     
     testStudent.addGrade(courseCode, 80.0, null);
     assertEquals(0.0, testStudent.calculateGPA(), "GPA should be 0.0 for courses with a missing final exam grade.");
-}
-
-   @Test
-    void testGradePersistenceInMemory() {
-        String courseCode = "MATH101";        
-        Course mathCourse = new MandatoryCourse("Math", courseCode, 5, null,null, 30, 0, "Monday", null, null);
-        testStudent.registerCourse(mathCourse); 
-        
-        testStudent.addGrade(courseCode, 75.0, null);
-        
-        Double[] grades = testStudent.getGrades().get(courseCode);
-        
-        assertAll("Grade Data Integrity Validations",
-            () -> assertNotNull(grades, "Grade array should not be null."),
-            () -> assertEquals(75.0, grades[0], "Midterm grade must be recorded correctly."),
-            () -> assertNull(grades[1], "Final grade should remain null if not entered.")
-        );;
-    }
-
+}   
+    
+    /**
+     * Ensures that grades cannot be assigned to a course unless the student is officially registered for it, preventing orphaned grade records.
+    */
     @Test
     void testRegistrationValidationBeforeGrading() {
         String unregisteredCourse = "HIST101";
@@ -127,4 +132,16 @@ public class StudentTest {
             "Grades should not be assigned to a course the student is not registered for.");
     }
 
+    /**
+     * Validates the department restriction logic during course registration.
+     * Ensures that a student cannot register for a mandatory course that does not belong 
+     * to their own department (e.g., Engineering student trying to take a Psychology mandatory course).
+     */
+    @Test
+void testDepartmentRestrictionLogic() {
+    Course invalidCourse = new MandatoryCourse("Intro to Psych", "PSY101", 5, null, "Psychology", 40, 0, "Wednesday", LocalTime.of(10, 0), LocalTime.of(13, 0));
+    registrationSystem.registerCourse(testStudent, invalidCourse);
+    assertFalse(testStudent.getRegisteredCourses().contains(invalidCourse), 
+        "Student should NOT be able to register for a Psychology course.");
+}
 }

@@ -62,7 +62,7 @@ public class Registration {
     }
     
     /**
-     * Handles the full registration logic, verifying capacity, conflicts, and duplicates.
+     * Handles the full registration logic, verifying department eligibility,credit limits, capacity, conflicts, and duplicates.
      * Saves the successful registration to the CSV database.
      * @param student The student attempting to register.
      * @param course The course target for registration.
@@ -79,6 +79,17 @@ public class Registration {
             System.out.println("Warning: You are already registered for " + course.getCourseName() + ".");
             return;
         }
+
+        if (course instanceof MandatoryCourse) {
+        String courseDept = course.getCourseDepartment().toUpperCase();
+        String studentDept = student.getDepartment().toUpperCase();
+
+        if (!studentDept.contains(courseDept)) {
+            System.out.println("Error: '" + course.getCourseName() + "' is a mandatory course for " + 
+                               courseDept + " department. You are not eligible to register.");
+            return;
+        }
+      }
 
         int currentTotalCredits = 0;
     for (Course c : student.getRegisteredCourses()) {

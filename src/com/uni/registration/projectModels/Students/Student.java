@@ -179,7 +179,7 @@ public abstract class Student implements Registrable{
 
     /**
      * Updates the student's password after validating the current one.
-     * @param currentStudentPassword The existing password.
+     * @param currentStudentPassword The existing password. 
      * @param newSStudentPassword The new password to set.
      * @return true if changed successfully, false otherwise.
      */
@@ -188,7 +188,7 @@ public abstract class Student implements Registrable{
             System.out.println("Current password is incorrect.");
             return false;
         }
-        if(newSStudentPassword.equals(currentStudentPassword)){
+        if(currentStudentPassword.equals(newSStudentPassword)){
            System.out.println("New password cannot be equal current password.");
            return false;
         }

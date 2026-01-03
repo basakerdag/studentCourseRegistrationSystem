@@ -20,7 +20,6 @@ public class Main {
         Registration.loadEnrollments(studentManager,catalog);
         Instructor loggedInInstructor = null; 
         Student loggedInStudent = null; 
-        studentManager.loadFromStudentCsv();
         studentManager.loadGradesFromCsv();
         
 

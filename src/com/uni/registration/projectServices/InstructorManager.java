@@ -57,7 +57,7 @@ public class InstructorManager {
                 inst.getInstructorSurname(),
                 inst.getInstructorID(),
                 inst.getInstructorDepartment(),
-                inst.getPassword()
+                inst.getPassword() 
                 );
                 pw.println(csvLine);
             }
