@@ -10,7 +10,7 @@ public class CourseTest {
 
     @BeforeEach
     void setUp(){
-        testCourse= new MandatoryCourse("Software Validation", "SENG302", 6, null, 2, 0, "Friday",
+        testCourse= new MandatoryCourse("Software Validation", "SENG302", 6, null,null, 2, 0, "Friday",
         LocalTime.of(14, 0), LocalTime.of(17, 0));
     }
     

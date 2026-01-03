@@ -75,7 +75,7 @@ public class Main {
                         input.nextLine();
                         switch(dashboardChoice){
                             case 1:
-                                catalog.displayCourses();
+                                catalog.displayCourses(loggedInStudent);
                                 break;
                             case 2:
                                 System.out.println("---Enroll in a course---");
@@ -258,9 +258,12 @@ public class Main {
                                 LocalTime courseEndHour=LocalTime.parse(input.nextLine());
                                 Course newCourse=null;
                                 if (addCourseOption==1){
-                                      newCourse=new MandatoryCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount,courseDay,courseStartHour,courseEndHour);
+                                     System.out.println("For whom is this course mandatory?");
+                                     String courseDepartment=input.nextLine();
+                                      newCourse=new MandatoryCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseDepartment,courseCapacity,initialEnrolledCount,courseDay,courseStartHour,courseEndHour);
                                 } else if(addCourseOption==2){
-                                     newCourse=new ElectiveCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseCapacity,initialEnrolledCount,courseDay,courseStartHour,courseEndHour);
+                                    String courseDepartment="Elective";
+                                     newCourse=new ElectiveCourse(courseName, courseCode, courseCredit, loggedInInstructor,courseDepartment,courseCapacity,initialEnrolledCount,courseDay,courseStartHour,courseEndHour);
                                 }
                                 if(newCourse!=null){
                                     catalog.addCourse(newCourse);

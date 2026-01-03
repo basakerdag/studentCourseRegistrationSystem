@@ -92,7 +92,7 @@ public class StudentTest {
     @Test
     void testGpaCalculationWithMissingFinal() {
     String courseCode = "CENG101";  
-    Course mockCourse = new MandatoryCourse("Java", courseCode, 5, null, 30, 0, "Monday", null, null);
+    Course mockCourse = new MandatoryCourse("Java", courseCode, 5, null,null, 30, 0, "Monday", null, null);
 
     testStudent.registerCourse(mockCourse); 
     
@@ -103,7 +103,7 @@ public class StudentTest {
    @Test
     void testGradePersistenceInMemory() {
         String courseCode = "MATH101";        
-        Course mathCourse = new MandatoryCourse("Math", courseCode, 5, null, 30, 0, "Monday", null, null);
+        Course mathCourse = new MandatoryCourse("Math", courseCode, 5, null,null, 30, 0, "Monday", null, null);
         testStudent.registerCourse(mathCourse); 
         
         testStudent.addGrade(courseCode, 75.0, null);

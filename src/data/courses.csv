@@ -1,3 +1,3 @@
-Calculus-I,MATH01,7,1,Ali,Y�lmaz,Mandatory,20,1,Tuesday,13:00,16:00
-Calculus-II,MATH02,7,2,Ahmet,Yilmaz,Mandatory,35,1,Monday,10:00,13:00
-Introduction to Programming,CSE01,5,1,Ali,Y�lmaz,Mandatory,20,1,Friday,13:00,16:00
+calculus-1,math01,7,1,deneme,deneme,Engineering,Mandatory,20,0,friday,13:00,16:00
+secmelideneme,scc02,5,1,deneme,deneme,Elective,Elective,20,0,tuesday,13:00,14:00
+psy,PSY01,5,1,deneme,deneme,psy,Mandatory,20,0,deneme,13:00,14:00

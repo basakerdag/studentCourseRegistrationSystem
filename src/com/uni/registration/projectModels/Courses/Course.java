@@ -12,18 +12,20 @@ public abstract class Course{
     private String courseCode;
     protected int courseCredit;
     private Instructor instructor;
+    private String courseDepartment;
     private int courseCapacity;
     private int courseEnrolledCount;
     private String courseDay;
     private LocalTime courseStartHour;
     private LocalTime courseEndHour;
 
-    public Course (String courseName,String courseCode,int courseCredit,Instructor instructor,int courseCapacity,int courseEnrolledCount,String courseDay,
+    public Course (String courseName,String courseCode,int courseCredit,Instructor instructor,String courseDepartment,int courseCapacity,int courseEnrolledCount,String courseDay,
         LocalTime courseStartHour,LocalTime courseEndHour){
         this.courseName=courseName;
         this.courseCode=courseCode;
         this.courseCredit=courseCredit;
         this.instructor=instructor;
+        this.courseDepartment=courseDepartment;
         this.courseCapacity=courseCapacity; 
         this.courseEnrolledCount=0;
         this.courseDay=courseDay;
@@ -60,6 +62,13 @@ public abstract class Course{
     }
     public void setInstructor(Instructor instructor){
         this.instructor=instructor;
+    }
+
+    public String getCourseDepartment(){
+        return courseDepartment;
+    }
+    public void setCourseDepartment(String courseDepartment){
+        this.courseDepartment=courseDepartment;
     }
 
     public int getCourseCapacity(){

@@ -18,10 +18,10 @@ public class RegistrationTest {
     void setUp() {
 
         testStudent = new UndergraduateStudent("Deniz", "Aydin", 101, "CE", 2, "pass123");
-        capacityCourse = new MandatoryCourse("Database", "CSE301", 5, null, 1, 0, "Wednesday", 
-                                             LocalTime.of(10, 0), LocalTime.of(12, 0));
+        capacityCourse = new MandatoryCourse("Software Validation", "SENG302", 6, null,null, 2, 0, "Friday",
+        LocalTime.of(14, 0), LocalTime.of(17, 0));
         registrationSystem = new Registration(testStudent, capacityCourse);
-        mathCourse = new MandatoryCourse("Calculus I", "MATH101", 5, null, 50, 0, "Monday", 
+        mathCourse = new MandatoryCourse("Calculus I", "MATH101", 5, null, null,50, 0, "Monday", 
                                      LocalTime.of(9, 0), LocalTime.of(11, 0));
     }
 
@@ -50,11 +50,11 @@ public class RegistrationTest {
 
     @Test
     void testScheduleConflict() {
-    Course firstCourse = new MandatoryCourse("Math 101", "MAT101", 5, null, 50, 0, "Monday", 
+    Course firstCourse = new MandatoryCourse("Math 101", "MAT101", 5, null,null, 50, 0, "Monday", 
                                              LocalTime.of(9, 0), LocalTime.of(11, 0));
     registrationSystem.registerCourse(testStudent, firstCourse);
 
-    Course conflictingCourse = new MandatoryCourse("Physics 101", "PHYS101", 5, null, 50, 0, "Monday", 
+    Course conflictingCourse = new MandatoryCourse("Physics 101", "PHYS101", 5, null,null, 50, 0, "Monday", 
                                                   LocalTime.of(10, 30), LocalTime.of(12, 30)); 
     registrationSystem.registerCourse(testStudent, conflictingCourse);
 

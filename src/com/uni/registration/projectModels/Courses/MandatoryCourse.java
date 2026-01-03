@@ -9,10 +9,10 @@ import java.time.LocalTime;
  */
 
  public class MandatoryCourse extends Course{
-    public MandatoryCourse(String courseName,String courseCode,int courseCredit,Instructor instructor,int courseCapacity,int courseEnrolledCount,
+    public MandatoryCourse(String courseName,String courseCode,int courseCredit,Instructor instructor,String courseDepartment,int courseCapacity,int courseEnrolledCount,
         String courseDay,LocalTime courseStartHour,LocalTime courseEndHour)
     {
-        super (courseName,courseCode,courseCredit,instructor,courseCapacity,courseEnrolledCount,courseDay,courseStartHour,courseEndHour);
+        super (courseName,courseCode,courseCredit,instructor,courseDepartment,courseCapacity,courseEnrolledCount,courseDay,courseStartHour,courseEndHour);
     }
 
     /**

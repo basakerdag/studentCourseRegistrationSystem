@@ -212,7 +212,6 @@ public abstract class Student implements Registrable{
         if (finalExam != null) existing[1] = finalExam;
 
         grades.put(courseCode, existing);
-        System.out.println("Grades recorded/updated for: " + courseCode);
     } else {
         System.out.println("Error: Student is not registered for " + courseCode);
     }

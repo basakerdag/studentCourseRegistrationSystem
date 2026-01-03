@@ -80,6 +80,16 @@ public class Registration {
             return;
         }
 
+        int currentTotalCredits = 0;
+    for (Course c : student.getRegisteredCourses()) {
+        currentTotalCredits += c.getCourseCredit();
+    }
+    if (currentTotalCredits + course.getCourseCredit() > 30) {
+        System.out.println("Warning: Credit limit exceeded! Cannot exceed 30 credits. Current: " 
+                            + currentTotalCredits + ", Course Credit: " + course.getCourseCredit());
+        return;
+    }
+
 
     if (course.getCourseEnrolledCount() >= course.getCourseCapacity()) {
         System.out.println("Warning! " + course.getCourseName() + " is full.");

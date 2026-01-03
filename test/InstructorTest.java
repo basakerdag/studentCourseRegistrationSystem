@@ -39,7 +39,7 @@ public class InstructorTest {
 
     @Test
     void testInstructorCourseAssignment() {
-        Course course = new ElectiveCourse("Embedded Systems", "EEE065", 5, testInstructor, 30, 0, "Tuesday",
+        Course course = new ElectiveCourse("Embedded Systems", "EEE065", 5, testInstructor,null, 30, 0, "Tuesday",
             LocalTime.of(13, 0), LocalTime.of(15, 0));
 
         assertAll("Course Instructor Assignment",
